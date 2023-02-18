@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import InProduct, Product, Warehouse
-from .forms import ProductForm, InProductForm
+from .models import InProduct, Product, Warehouse, OutProduct
+from .forms import ProductForm, InProductForm, OutProductForm
 from django.http import HttpResponseRedirect
 from django.db.models import Avg, Count, Max, Min, Sum
 from django.contrib.auth.models import User
@@ -8,7 +8,7 @@ from django.views import View
 
 # Create your views here.
 
-
+# Tovar kirimi
 def in_product_list(request):
     in_product_list = InProduct.objects.all()
     return render(request, 'products/in_product_list.html', {
@@ -63,6 +63,65 @@ def delete_in_product(request, product_id):
     return redirect('in_product_list')
 
 
+# Tovar chiqimi
+def out_product_list(request):
+    out_product_list = OutProduct.objects.all()
+    return render(request, 'products/out_product_list.html', {
+        'out_product_list' : out_product_list,
+    })
+
+def add_out_product(request):
+    submitted = False
+    if request.method == "POST":
+        form = OutProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/products/add_out_product?submitted=True')
+    else:
+        form = OutProductForm()
+        if 'submitted' in request.GET:
+            submitted = True
+
+    context = {
+        'form': form,
+        'submitted': submitted,
+        'sana' : form['out_date'],
+        'trader' : form['trader'],
+        'client' : form['client'],
+        'ombor' : form['warehouse'],
+        'tovar' : form['product'],
+        'soni' : form['quantity'],
+        'tannarxi' : form['body_price'],
+        'tansumma' : form['body_summa'],
+        'narxi' : form['price'],
+        'summa' : form['summa'],
+        'snarxi' : form['shop_price'],
+        'ssumma' : form['shop_summa'],
+        'foyda' : form['profit'],
+        'sfoyda' : form['sprofit'],
+        'izoh' : form['comment'],
+    }
+
+    return render(request, 'products/add_out_product.html',context )
+
+def update_out_product(request, product_id):
+    product = OutProduct.objects.get(pk=product_id)
+    form = OutProductForm(request.POST or None, request.FILES or None, instance=product)
+    if form.is_valid():
+            form.save()
+            return redirect('out_product_list')
+    return render(request, 'products/update_out_product.html', {
+       'form': form,
+       'product': product,
+    })
+
+def delete_out_product(request, product_id):
+    product = OutProduct.objects.get(pk=product_id)
+    product.delete()
+    return redirect('out_product_list')
+
+
+# Ombor
 def warehouse(request):
     warehouses = Warehouse.objects.all()
     data = []
@@ -103,6 +162,7 @@ def warehouse(request):
         return render(request, 'products/warehouse.html', {'warehouses': warehouses, 'results': data,})
 
 
+# Tovar hosil qilish
 def product_name_list(request):
     product_list = Product.objects.all()
     return render(request, 'products/product_list.html', {
@@ -142,14 +202,30 @@ def delete_product_name(request, product_id):
     return redirect('product_list')
 
 
-def creditors(request):
+# optomchilar
+def providers(request):
     return render(
         request,
-        'products/creditors.html',
+        'products/providers.html',
         {
             "results": list(
                 InProduct.objects.values('provider__username').order_by('provider').annotate(
                     total=Sum('body_summa')
+                ).filter(total__gt=1)
+            )
+        }
+    )
+
+
+# Clientlar
+def clients(request):
+    return render(
+        request,
+        'products/clients.html',
+        {
+            "results": list(
+                OutProduct.objects.values('client__username').order_by('client').annotate(
+                    total=Sum('shop_summa')
                 ).filter(total__gt=1)
             )
         }

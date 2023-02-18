@@ -2,7 +2,7 @@
 
 {% block content %}
 <br>
-<h1> Haqdorlar</h1> <br>
+<h1> Providerlar </h1> <br>
 
 
 <table id="table" class="table table-striped table-hover table-bordered">
@@ -10,7 +10,7 @@
       <tr>
         <th scope="col">№</th>
         <th scope="col">Nomi</th>
-        <th scope="col">Haqqi</th>
+        <th scope="col">Balansi</th>
       </tr>
     </thead>
     <tbody class="table-group-divider">
@@ -18,7 +18,7 @@
       <tr>
         <th scope="row">{{ forloop.counter }}</th>
         <td>{{ r.provider__username }}</td>
-        <td class="haqqi">{{ r.total }}</td>
+        <td class="balans">{{ r.total }}</td>
       </tr>
       {% endfor %}
       <tr class="table-dark border-primary fs-5 fw-bold">
@@ -32,10 +32,10 @@
   <script>
     
     var total = document.getElementById('total');
-    var haqqi = document.getElementsByClassName('haqqi');
+    var balans = document.getElementsByClassName('balans');
     var cal = 0;
-    for(let i=0; i<haqqi.length; i++){
-        cal +=  parseInt(haqqi[i].innerHTML);
+    for(let i=0; i<balans.length; i++){
+        cal +=  parseInt(balans[i].innerHTML);
     }
     total.innerHTML = cal;
   </script>

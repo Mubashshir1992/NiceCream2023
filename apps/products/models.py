@@ -26,6 +26,7 @@ class Product(models.Model):
     product_weight = models.FloatField(blank=True, null=True, )
     code = models.IntegerField('Kodi', blank=True, null=True,)
     image = models.ImageField(blank=True, null=True)
+    about = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -48,14 +49,37 @@ class InProduct(models.Model):
     provider = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="buy_provider")
     warehouse = models.ForeignKey(Warehouse, blank=True, null=True, on_delete= models.CASCADE)
     product = models.ForeignKey(Product, blank=True, null=True, on_delete= models.CASCADE)
-    quantity = models.IntegerField('Soni', blank=False, )
-    body_price = models.IntegerField('Tannarxi', blank=False, )
-    body_summa = models.IntegerField('TanSumma', blank=False, )
-    price = models.IntegerField('Narxi', blank=False, )
-    summa = models.IntegerField('Summa', blank=False, )
-    shop_price = models.IntegerField('Snarxi', blank=False, )
-    shop_summa = models.IntegerField('Ssumma', blank=False,)
-    comment = models.TextField(blank=True, default='Tovar kirimi',)
+    quantity = models.IntegerField('Soni', )
+    body_price = models.IntegerField('Tannarxi',  )
+    body_summa = models.IntegerField('TanSumma',  )
+    price = models.IntegerField('Narxi',  )
+    summa = models.IntegerField('Summa',  )
+    shop_price = models.IntegerField('Snarxi',  )
+    shop_summa = models.IntegerField('Ssumma', )
+    comment = models.TextField(blank=True, null=True, default='Tovar kirimi',)
 
     def __str__(self):
         return self.provider.username
+
+
+#Tovar chiqim qilish
+class OutProduct(models.Model):
+
+    out_date = models.DateTimeField('Sana',)
+    trader = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="buyer_seller")
+    client = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="shopkeeper")
+    warehouse = models.ForeignKey(Warehouse, blank=True, null=True, on_delete= models.CASCADE)
+    product = models.ForeignKey(Product, blank=True, null=True, on_delete= models.CASCADE)
+    quantity = models.IntegerField('Soni',  )
+    body_price = models.IntegerField('Tannarxi',  )
+    body_summa = models.IntegerField('TanSumma',  )
+    price = models.IntegerField('Narxi',  )
+    summa = models.IntegerField('Summa',  )
+    shop_price = models.IntegerField('Snarxi',  )
+    shop_summa = models.IntegerField('Ssumma', )
+    profit = models.IntegerField('Foyda', )
+    sprofit = models.IntegerField('Sfoyda', )
+    comment = models.TextField(blank=True, null=True, default='Tovar chiqimi',)
+
+    def __str__(self):
+        return self.trader.username
