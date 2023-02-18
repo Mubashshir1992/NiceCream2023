@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  .bodyback {
+            background: url("https://www.datocms-assets.com/52693/1655103334-keamanan-data-1.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: -1;
+        }
+
+  .forminput {
+            padding-left: 15px;
+            background-color: rgba(255, 255, 255, 0.02);
+            text-align: center;
+            box-shadow: 0 0 15px rgb(255, 255, 255);
+            border-radius: 15px;
+            width: 700px;
+            margin: 10vh auto;
+  }
+
+  .formtitle {
+            color: rgb(72, 255, 179);
+            margin-top: 30px;
+            text-align: center;
+            font-size: 50px;
+  }
+  .keng {
+    
+    width: 200px;
+    font-size: 22px;
+  }
+
+
+</style>
+<body class="bodyback">
+  
+
+{% if form.errors %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong><p>There was an error with your form...</p></strong> 
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+{% endif %}
+<!-- <div class="shadow p-3 mb-3 bg-body rounded asosiy"> -->
+<h1 class="formtitle">Register</h1>
+
+<form class="forminput" action="{% url 'register_user' %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <br>  
+    <input type="submit" value="Submit" class="btn btn-success keng">
+</form>
+<!-- </div> -->
+</body>
+{% endblock content %}

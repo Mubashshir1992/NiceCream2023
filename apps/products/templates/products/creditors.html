@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br>
+<h1> Haqdorlar</h1> <br>
+
+
+<table id="table" class="table table-striped table-hover table-bordered">
+    <thead class="table-info fs-5 fw-bold">
+      <tr>
+        <th scope="col">№</th>
+        <th scope="col">Nomi</th>
+        <th scope="col">Haqqi</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for r in results %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ r.provider__username }}</td>
+        <td class="haqqi">{{ r.total }}</td>
+      </tr>
+      {% endfor %}
+      <tr class="table-dark border-primary fs-5 fw-bold">
+        <td>Total</td>
+        <td></td>
+        <td id="total"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    
+    var total = document.getElementById('total');
+    var haqqi = document.getElementsByClassName('haqqi');
+    var cal = 0;
+    for(let i=0; i<haqqi.length; i++){
+        cal +=  parseInt(haqqi[i].innerHTML);
+    }
+    total.innerHTML = cal;
+  </script>
+  
+{% endblock content %}
