@@ -3,8 +3,12 @@ from .models import User
 from django import forms
 
 class CustomUserCreateonForm(UserCreationForm):
-
+    USER_TYPE_CHOICES = (
+        ('PR', 'Provider'),
+        ('CL', 'Client'),
+    )
     username = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'User Name'}))
+    user_type = forms.ChoiceField(choices=USER_TYPE_CHOICES)
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control', 'placeholder':'Email'}))
     first_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'First Name'}))
     last_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Last Name'}))
@@ -16,7 +20,7 @@ class CustomUserCreateonForm(UserCreationForm):
 
     class Meta(UserCreationForm):
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'phone', 'address', 'image', 'password1', 'password2')
+        fields = ('username', 'user_type', 'first_name', 'last_name', 'email', 'phone', 'address', 'image', 'password1', 'password2')
         
 
 
@@ -32,7 +36,7 @@ class CustomUserCreateonForm(UserCreationForm):
 
 
 
-class CustomUserChangrForm(UserChangeForm):
+class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = User
         fields = "__all__"

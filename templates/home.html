@@ -1,10 +1,29 @@
-
 {% extends 'base.html' %}
+
+
+{% block title %}Maqolalar{% endblock title %}
 
 {% block content %}
 
-
-
-
-
+        <div class="container my-3">
+            <div class="row">
+              {% for post in object_list %}
+              <div class="col-4 col-md-4">
+                <div class="card p-3 m-3 border-0 shadow" style="width: 92%; height: 92%;">
+                  {% if post.photo %}
+                  <img src="{{ post.photo.url }}" class="card-img-top" style="width: 98%; height: 70%;" alt="">
+                  {% endif %}
+                  <div class="card-body">
+                    <h5 class="card-title card-color">{{ post.title }}</h5>
+                    <p class="text-muted"> Muallif:  {{ post.author.first_name }}  |  {{ post.date }}</p>
+                    <p class="card-text">{{ post.body | slice:":100" }}</p>
+                    <button class="btn btn-success"><i class="fal fa-thumbs-up"></i></button>
+                    <a href="{% url 'post_detail' post.pk %}" class="btn btn-primary">Batafsil...</a>
+                  </div>
+                </div>
+              </div>
+              {% endfor%}
+            </div>
+          </div>
+          
 {% endblock content %}

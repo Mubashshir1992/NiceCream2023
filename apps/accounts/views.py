@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import CustomUserCreateonForm
+from .models import User
 
 # Create your views here.
 def login_user(request):
@@ -42,4 +43,21 @@ def register_user(request):
         form = CustomUserCreateonForm()        
     return render(request, 'registration/register_user.html', {
         'form': form,
+    })
+
+
+
+# optomchilar
+def providers(request):
+    
+    providers = User.objects.filter(user_type = 'PR')
+    return render(request, 'accounts/providers.html', {
+        'providers' : providers,
+    })
+
+# Clientlar
+def clients(request):
+    clients = User.objects.filter(user_type = 'CL')
+    return render(request, 'accounts/clients.html', {
+        'clients' : clients,
     })

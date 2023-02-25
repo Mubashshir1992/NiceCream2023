@@ -3,6 +3,12 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class User(AbstractUser):
+
+    USER_TYPE_CHOICES = (
+        ('PR', 'Provider'),
+        ('CL', 'Client'),
+    )
+
     username = models.CharField(max_length=255,unique=True,)
     first_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
@@ -15,6 +21,7 @@ class User(AbstractUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    user_type = models.CharField(max_length=50,choices=USER_TYPE_CHOICES, default='PR')
 
     def __str__(self):
         return self.username

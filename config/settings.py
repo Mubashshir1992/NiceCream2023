@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     # own apps
     'apps.accounts',
     'apps.products',
+    'apps.cashes',
+    'apps.pages',
 ]
 
 MIDDLEWARE = [

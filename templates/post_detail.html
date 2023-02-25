@@ -1,0 +1,70 @@
+{% extends 'home.html' %}
+
+
+{% block title %}Maqola{% endblock title %}
+{% block content %}
+
+        <div class="container my-3">
+            <div class="col-12 col-md-12">
+                <div class="card p-3 m-3 border-0 shadow" style="width: 92%; height: 92%;">
+                  {% if userpost.photo %}
+                  <img src="{{ userpost.photo.url }}" class="card-img-top" style="width: 98%; height: 70%;" alt="1-rasm">
+                  {% endif %} <br>
+                  <div class="card-body">
+                    <h2 class="card-title card-color">{{ userpost.title }}</h2> <br>
+                    <p class="text-muted"> Muallif:  {{ userpost.author.first_name }}  |  {{ userpost.date }}</p> <br>
+                    <p class="card-text">{{ userpost.body | safe }}</p> <br>
+                    {% if userpost.photo2 %}
+                    <img src="{{ userpost.photo2.url }}" class="card-img-top" style="width: 98%; height: 70%;" alt="2-rasm"> <br>
+                    {% endif %}
+                    {% if userpost.body2 %}
+                    <p class="card-text">{{ userpost.body2 | safe }}</p> <br>
+                    {% endif %}
+                    {% if userpost.photo3 %}
+                    <img src="{{ userpost.photo3.url }}" class="card-img-top" style="width: 98%; height: 70%;" alt="3-rasm"> <br>
+                    {% endif %}
+                    {% if userpost.body3 %}
+                    <p class="card-text">{{ userpost.body3 | safe }}</p> <br>
+                    {% endif %}
+                    {% if userpost.photo4 %}
+                    <img src="{{ userpost.photo4.url }}" class="card-img-top" style="width: 98%; height: 70%;" alt="4-rasm"> <br>
+                    {% endif %}
+                    {% if userpost.body4 %}
+                    <p class="card-text">{{ userpost.body4 | safe }}</p> <br>
+                    {% endif %}
+                    <button class="btn btn-success"><i class="fal fa-thumbs-up"></i></button>
+                    {% if user.is_superuser %}
+                    <a href="{% url 'post_edit' userpost.pk %}" class="btn btn-outline-primary">Tahrirlash</a>
+                    <a href="{% url 'post_delete' userpost.pk %}" class="btn btn-outline-danger">O'chirish</a>
+                    {% endif %}
+                  </div>
+                  <div class="card">
+                    <div class="card-header d-inline-block"><h5 class="float-start">Izohlar</h5><a href="{% url 'add_comment' userpost.pk %}" class="float-end">Izoh qo'shish</a></div>
+                    {% if not userpost.comments.all %}
+                        <p>Hozircha izohlar yo'q!</p> 
+                    {% else %}
+                      {% for comment in userpost.comments.all %}
+                        <div class="card-body">
+                          <blockquote class="blockquote mb-0">
+                            <strong class="d-inline-block">
+                              {% if comment.author.first_name %}
+                            <p class="float-start">{{ comment.author.first_name }}  |</p> 
+                              {% else %}
+                            <p class="float-start">{{ comment.author }}  |</p>   
+                              {% endif %}
+                            <p class="float-end">|  {{ comment.date_added }}</p>
+                            
+                            </strong>
+                            <br>
+                            <p>{{ comment.body }}</p>
+                          </blockquote>
+                        </div>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                </div>
+            </div>
+        </div>
+          
+{% endblock content %}
+

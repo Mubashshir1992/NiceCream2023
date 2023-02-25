@@ -1,0 +1,16 @@
+{% extends 'home.html' %}
+
+
+{% block title %}Maqolani o'chirish{% endblock title %}
+
+{% block content %}
+<h2 class="text-warning">Maqolani o'chirish</h2>
+<form method="post" > {% csrf_token %}
+    <h4> "{{ userpost.title }}"</h4> <h5> nomli maqolani o'chirishni xohlaysizmi?<h5>
+
+    <button type="submit" class="btn btn-outline-danger mt-3">O'chirish</button>
+
+</form>
+
+
+{% endblock content %}

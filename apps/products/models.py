@@ -46,7 +46,7 @@ class Warehouse(models.Model):
 class InProduct(models.Model):
 
     in_date = models.DateTimeField('Sana',)
-    provider = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="buy_provider")
+    provider = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="buy_provider", limit_choices_to ={'user_type':'PR'})
     warehouse = models.ForeignKey(Warehouse, blank=True, null=True, on_delete= models.CASCADE)
     product = models.ForeignKey(Product, blank=True, null=True, on_delete= models.CASCADE)
     quantity = models.IntegerField('Soni', )
@@ -66,8 +66,8 @@ class InProduct(models.Model):
 class OutProduct(models.Model):
 
     out_date = models.DateTimeField('Sana',)
-    trader = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="buyer_seller")
-    client = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="shopkeeper")
+    trader = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="buyer_seller", limit_choices_to ={'user_type':'PR'})
+    client = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="shopkeeper", limit_choices_to ={'user_type':'CL'})
     warehouse = models.ForeignKey(Warehouse, blank=True, null=True, on_delete= models.CASCADE)
     product = models.ForeignKey(Product, blank=True, null=True, on_delete= models.CASCADE)
     quantity = models.IntegerField('Soni',  )

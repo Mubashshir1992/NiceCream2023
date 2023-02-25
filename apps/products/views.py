@@ -3,14 +3,14 @@ from .models import InProduct, Product, Warehouse, OutProduct
 from .forms import ProductForm, InProductForm, OutProductForm
 from django.http import HttpResponseRedirect
 from django.db.models import Avg, Count, Max, Min, Sum
-from django.contrib.auth.models import User
+from apps.accounts.models import User
 from django.views import View
 
 # Create your views here.
 
 # Tovar kirimi
 def in_product_list(request):
-    in_product_list = InProduct.objects.all()
+    in_product_list = InProduct.objects.all().order_by('-in_date')
     return render(request, 'products/in_product_list.html', {
         'in_product_list' : in_product_list,
     })
@@ -20,6 +20,13 @@ def add_in_product(request):
     if request.method == "POST":
         form = InProductForm(request.POST)
         if form.is_valid():
+            p = form.cleaned_data['provider']
+            ts = int(form.cleaned_data['body_summa'])
+
+            provider = User.objects.filter(user_type = 'PR').get(username=p)
+            provider.balance += ts
+            provider.save()
+
             form.save()
             return HttpResponseRedirect('/products/add_in_product?submitted=True')
     else:
@@ -50,8 +57,15 @@ def update_in_product(request, product_id):
     product = InProduct.objects.get(pk=product_id)
     form = InProductForm(request.POST or None, request.FILES or None, instance=product)
     if form.is_valid():
-            form.save()
-            return redirect('in_product_list')
+        # p = form.cleaned_data['provider']
+        # ts = int(form.cleaned_data['body_summa'])
+
+        # provider = User.objects.filter(user_type = 'PR').get(username=p)
+        # provider.balance = ts
+        # provider.save()
+
+        form.save()
+        return redirect('in_product_list')
     return render(request, 'products/update_in_product.html', {
        'form': form,
        'product': product,
@@ -65,7 +79,7 @@ def delete_in_product(request, product_id):
 
 # Tovar chiqimi
 def out_product_list(request):
-    out_product_list = OutProduct.objects.all()
+    out_product_list = OutProduct.objects.all().order_by('-out_date')
     return render(request, 'products/out_product_list.html', {
         'out_product_list' : out_product_list,
     })
@@ -75,6 +89,28 @@ def add_out_product(request):
     if request.method == "POST":
         form = OutProductForm(request.POST)
         if form.is_valid():
+            t = form.cleaned_data['trader']
+            c = form.cleaned_data['client']
+            s = int(form.cleaned_data['summa'])
+            ss = int(form.cleaned_data['shop_summa'])
+            # p = form.cleaned_data['product']
+            # q= form.cleaned_data['quantity']
+            # w= form.cleaned_data['warehouse']
+            # bs = int(form.cleaned_data['body_summa'])
+
+            # product = InProduct.objects.filter(warehouse=w, product=p)
+            # product.quantity -= q
+            # product.body_summa -= bs
+            # product.save()
+            
+            trader = User.objects.filter(user_type = 'PR').get(username=t)
+            trader.balance -= s
+            trader.save()
+
+            client = User.objects.filter(user_type = 'CL').get(username=c)
+            client.balance -= ss
+            client.save()
+
             form.save()
             return HttpResponseRedirect('/products/add_out_product?submitted=True')
     else:
@@ -201,32 +237,3 @@ def delete_product_name(request, product_id):
     product.delete()
     return redirect('product_list')
 
-
-# optomchilar
-def providers(request):
-    return render(
-        request,
-        'products/providers.html',
-        {
-            "results": list(
-                InProduct.objects.values('provider__username').order_by('provider').annotate(
-                    total=Sum('body_summa')
-                ).filter(total__gt=1)
-            )
-        }
-    )
-
-
-# Clientlar
-def clients(request):
-    return render(
-        request,
-        'products/clients.html',
-        {
-            "results": list(
-                OutProduct.objects.values('client__username').order_by('client').annotate(
-                    total=Sum('shop_summa')
-                ).filter(total__gt=1)
-            )
-        }
-    )

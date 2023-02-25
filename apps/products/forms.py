@@ -1,4 +1,5 @@
 from django import forms
+from django.forms.widgets import NumberInput
 from django.forms import ModelForm
 from .models import Product, InProduct, OutProduct
 
@@ -51,7 +52,7 @@ class InProductForm(ModelForm):
             }
         
         widgets = {
-            'in_date': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Sana'}),
+            'in_date': forms.TextInput(attrs={'type' : 'date','class':'form-control', 'placeholder':'Sana'}),
             'warehouse': forms.Select(attrs={'class':'form-control', 'placeholder':'Ombor'}),
             'provider': forms.Select(attrs={'class':'form-control', 'placeholder':'Provider'}),
             'product': forms.Select(attrs={'class':'form-control', 'placeholder':'Mahsulot nomi'}),
@@ -67,6 +68,7 @@ class InProductForm(ModelForm):
 
 
 class OutProductForm(ModelForm):
+
     class Meta:
         model = OutProduct
         fields = ('out_date', 'warehouse', 'trader', 'client', 'product', 'quantity', 'body_price', 'body_summa', 'price', 'summa', 'shop_price', 'shop_summa', 'profit', 'sprofit', 'comment')
@@ -90,7 +92,7 @@ class OutProductForm(ModelForm):
             }
         
         widgets = {
-            'in_date': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Sana'}),
+            'out_date': forms.TextInput(attrs={'type' : 'date','class':'form-control', 'placeholder':'Sana'}),
             'warehouse': forms.Select(attrs={'class':'form-control', 'placeholder':'Ombor'}),
             'trader': forms.Select(attrs={'class':'form-control', 'placeholder':'Trader'}),
             'client': forms.Select(attrs={'class':'form-control', 'placeholder':'Client'}),

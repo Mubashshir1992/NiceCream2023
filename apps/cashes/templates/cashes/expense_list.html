@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+<br>
+<h1>Xarajat qilish   <a href="{% url 'add_expense' %}" class="btn btn-outline-success btn-sm mx-1">Add new</a></h1><br>
+
+<table class="table table-striped table-hover table-bordered">
+    <thead class="table-info">
+      <tr>
+        <th scope="col">№</th>
+        <th scope="col">Sana</th>
+        <th scope="col">Kassa</th>
+        <th scope="col">Summa</th>
+        <th scope="col">Izoh</th>
+        <th scope="col">Sozlamalar</th>
+        
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for ex in expense_list %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ ex.date }}</td>
+        <td>{{ ex.cash}}</td>
+        <td class="summa">{{ ex.summa}}</td>
+        <td>{{ ex.comment }}</td>
+        {% if user.is_superuser %}
+        <td align="right">
+          
+        </td>
+            {% endif %}
+      </tr>
+      {% endfor %}
+      <tr class="table-dark border-primary fs-5 fw-bold">
+        <td colspan="2">Total</td>
+        <td></td>
+        <td id="total_sum"></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<script>
+    
+  var total_sum = document.getElementById('total_sum');
+  var summa = document.getElementsByClassName('summa');
+
+  function totalResult(element_id, element_class){
+      var cal = 0;
+      for(let i=0; i<element_class.length; i++){
+        cal +=  parseFloat(element_class[i].innerHTML);
+      }
+      element_id.innerHTML = cal;
+  };
+
+  totalResult(total_sum, summa);
+  
+</script>
+{% endblock content %}

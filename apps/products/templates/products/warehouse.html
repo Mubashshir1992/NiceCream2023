@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container">
 <br>
 
 <h1> Ombor Qoldig'i : {{ selected }}  {% for x in size %}{{ x.warehouse_size}}{% endfor %}</h1> <br>
@@ -43,8 +44,7 @@
       </tr>
       {% endfor %}
       <tr class="table-dark border-primary fs-5 fw-bold">
-        <td>Total</td>
-        <td></td>
+        <td colspan="2">Total</td>
         <td></td>
         <td></td>
         <td id="total_sum"></td>
@@ -76,4 +76,5 @@
     totalResult(total_weight, weight);
     
   </script>
+</div>
 {% endblock content %}
