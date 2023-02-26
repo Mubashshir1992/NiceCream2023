@@ -27,7 +27,8 @@
         <td>{{ ex.comment }}</td>
         {% if user.is_superuser %}
         <td align="right">
-          
+          <a href="{% url 'update_expense' ex.id %}" class="btn btn-outline-secondary btn-sm mx-1">Update</a>
+          <a href="{% url 'delete_expense' ex.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
         </td>
             {% endif %}
       </tr>

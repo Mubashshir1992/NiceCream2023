@@ -50,14 +50,14 @@ def register_user(request):
 # optomchilar
 def providers(request):
     
-    providers = User.objects.filter(user_type = 'PR')
+    providers = User.objects.exclude(balance = 0).filter(user_type = 'PR')
     return render(request, 'accounts/providers.html', {
         'providers' : providers,
     })
 
 # Clientlar
 def clients(request):
-    clients = User.objects.filter(user_type = 'CL')
+    clients = User.objects.exclude(balance = 0).filter(user_type = 'CL')
     return render(request, 'accounts/clients.html', {
         'clients' : clients,
     })

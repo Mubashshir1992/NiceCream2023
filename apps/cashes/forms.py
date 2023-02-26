@@ -43,20 +43,20 @@ class InCashForm(ModelForm):
 class InCashClientForm(ModelForm):
     class Meta:
         model = InCashClient
-        fields = ('in_date', 'client', 'summa', 'comment')
+        fields = ('in_date', 'client', 'ssumma', 'comment')
 
         labels = {
             'in_date': 'YYYY-MM-DD HH:MM:SS',
             'client' : 'Client',
             'cash' : 'Cassa',
-            'summa' : '',
+            'ssumma' : '',
             'comment' : '',
             }
         
         widgets = {
             'in_date': forms.TextInput(attrs={'type' : 'datetime-local','class':'form-control', 'placeholder':'Sana'}),
             'client': forms.Select(attrs={'class':'form-control', 'placeholder':'Client'}),
-            'summa': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Summa'}),
+            'ssumma': forms.TextInput(attrs={'class':'form-control', 'placeholder':'SSumma'}),
             'comment': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Izoh'}),
         }
 

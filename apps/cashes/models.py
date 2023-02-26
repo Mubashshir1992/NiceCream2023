@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from apps.accounts.models import User
 
@@ -22,16 +23,22 @@ class InCash(models.Model):
     summa = models.IntegerField(null=True,)
     comment = models.TextField(blank=True, null=True, default='Pul kirimi',)
 
+    class Meta:
+        ordering = ['-in_date']
+
     def __str__(self):
-        return self.trader
+        return self.trader.username
 
 #Pul kirimi client
 class InCashClient(models.Model):
 
     in_date = models.DateTimeField('Sana',)
     client = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="client_payer", limit_choices_to ={'user_type':'CL'})
-    summa = models.IntegerField(null=True,)
+    ssumma = models.IntegerField(null=True,)
     comment = models.TextField(blank=True, null=True, default='Pul kirimi client',)
+
+    class Meta:
+        ordering = ['-in_date']
 
     def __str__(self):
         return self.client
@@ -46,6 +53,9 @@ class OutCash(models.Model):
     summa = models.IntegerField(null=True,)
     comment = models.TextField(blank=True, null=True, default='Pul chiqimi',)
 
+    class Meta:
+        ordering = ['-out_date']
+
     def __str__(self):
         return self.trader
 
@@ -56,5 +66,30 @@ class Expense(models.Model):
     summa = models.IntegerField(null=True,)
     comment = models.TextField(blank=True, null=True, default='Xarajat',)
 
+    class Meta:
+        ordering = ['-date']
+
     def __str__(self):
         return f'{self.comment}: {self.summa}'
+
+
+class Transaction(models.Model):
+    trans_id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True)
+    event_id = models.CharField(max_length=20, blank=True, null=True)
+    trans_date = models.CharField(max_length=255, blank=True, null=True)
+    provider = models.ForeignKey(User, related_name='transactions_as_provider', on_delete=models.PROTECT, blank=True, null=True, limit_choices_to ={'user_type':'PR'})
+    client = models.ForeignKey(User, related_name='transactions_as_client', on_delete=models.PROTECT, blank=True, null=True, limit_choices_to ={'user_type':'CL'})
+    cash = models.ForeignKey(Cash, related_name='transactions_as_cash', on_delete=models.PROTECT, blank=True, null=True)
+    cash_summa = models.DecimalField(default=0.0, max_digits=16, decimal_places=2)
+    cash_ssumma = models.DecimalField(default=0.0, max_digits=16, decimal_places=2)
+    body_summa = models.DecimalField('TransTanSumma', default=0.0, max_digits=16, decimal_places=2)
+    summa = models.DecimalField('TransSumma', default=0.0, max_digits=16, decimal_places=2)
+    shop_summa = models.DecimalField('TransSSumma', default=0.0, max_digits=16, decimal_places=2, blank=True, null=True)
+    comment = models.TextField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['-trans_date']
+
+    def __str__(self):
+        return f'{self.trans_date} : {self.comment}'
+

@@ -23,12 +23,12 @@
         <th scope="row">{{ forloop.counter }}</th>
         <td>{{ cash.in_date }}</td>
         <td>{{ cash.client }}</td>
-        <td>{{ cash.summa}}</td>
+        <td>{{ cash.ssumma}}</td>
         <td>{{ cash.comment }}</td>
         {% if user.is_superuser %}
         <td align="right">
-      
-          
+          <a href="{% url 'update_in_cashclient' cash.id %}" class="btn btn-outline-secondary btn-sm mx-1">Update</a>
+          <a href="{% url 'delete_in_cashclient' cash.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
         </td>
             {% endif %}
       </tr>

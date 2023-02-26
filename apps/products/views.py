@@ -4,6 +4,7 @@ from .forms import ProductForm, InProductForm, OutProductForm
 from django.http import HttpResponseRedirect
 from django.db.models import Avg, Count, Max, Min, Sum
 from apps.accounts.models import User
+from apps.cashes.models import Transaction
 from django.views import View
 
 # Create your views here.
@@ -21,10 +22,14 @@ def add_in_product(request):
         form = InProductForm(request.POST)
         if form.is_valid():
             p = form.cleaned_data['provider']
-            ts = int(form.cleaned_data['body_summa'])
+            bs = int(form.cleaned_data['body_summa'])
+            comment = form.cleaned_data['comment']
+            date = form.cleaned_data['in_date']
+            qs = Transaction.objects.all()
+            qs.create(trans_date = date, comment = comment, provider = p, body_summa = bs)
 
             provider = User.objects.filter(user_type = 'PR').get(username=p)
-            provider.balance += ts
+            provider.balance += bs
             provider.save()
 
             form.save()
@@ -93,6 +98,10 @@ def add_out_product(request):
             c = form.cleaned_data['client']
             s = int(form.cleaned_data['summa'])
             ss = int(form.cleaned_data['shop_summa'])
+            comment = form.cleaned_data['comment']
+            date = form.cleaned_data['out_date']
+            qs = Transaction.objects.all()
+            qs.create(trans_date = date, comment = comment, provider = t, client = c, summa = s, shop_summa = ss)
             # p = form.cleaned_data['product']
             # q= form.cleaned_data['quantity']
             # w= form.cleaned_data['warehouse']

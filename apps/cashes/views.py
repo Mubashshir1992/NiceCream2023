@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Cash, InCash, InCashClient, OutCash, Expense
+from .models import Cash, InCash, InCashClient, OutCash, Expense, Transaction
 from django.http import HttpResponseRedirect
 from .forms import CashForm, InCashForm, InCashClientForm, OutCashForm, ExpenseForm
 from apps.accounts.models import User
@@ -59,18 +59,6 @@ def add_in_cash(request):
     if request.method == "POST":
         form = InCashForm(request.POST)
         if form.is_valid():
-            t = form.cleaned_data['trader']
-            c = form.cleaned_data['cash']
-            s = int(form.cleaned_data['summa'])
-
-            trader = User.objects.filter(user_type = 'PR').get(username=t)
-            trader.balance += s
-            trader.save()
-
-            cash = Cash.objects.get(name=c)
-            cash.balance += s
-            cash.save()
-
             form.save()
             return HttpResponseRedirect('/cashes/add_in_cash?submitted=True')
     else:
@@ -85,16 +73,17 @@ def add_in_cash(request):
 
     return render(request, 'cashes/add_in_cash.html',context )
 
-def update_in_cash(request, cash_id):
-    cash = InCash.objects.get(pk=cash_id)
+def update_in_cash(request, id):
+    cash = InCash.objects.get(pk=id)
+    # trader = User.objects.filter(user_type = 'PR').get(username=cash.trader)
+    # trader.balance -= int(cash.summa)
+    # trader.save()
+
+    # c = Cash.objects.get(name=cash.cash)
+    # c.balance -= int(cash.summa)
+    # c.save() 
     form = InCashForm(request.POST or None, request.FILES or None, instance=cash)
     if form.is_valid():
-        # p = form.cleaned_data['provider']
-        # ts = int(form.cleaned_data['body_summa'])
-
-        # provider = User.objects.filter(user_type = 'PR').get(username=p)
-        # provider.balance = ts
-        # provider.save()
 
         form.save()
         return redirect('in_cash_list')
@@ -103,8 +92,8 @@ def update_in_cash(request, cash_id):
        'cash': cash,
     })
 
-def delete_in_cash(request, cash_id):
-    cash = InCash.objects.get(pk=cash_id)
+def delete_in_cash(request, id):
+    cash = InCash.objects.get(pk=id)
     cash.delete()
     return redirect('in_cash_list')
 
@@ -121,13 +110,6 @@ def add_in_cashclient(request):
     if request.method == "POST":
         form = InCashClientForm(request.POST)
         if form.is_valid():
-            c = form.cleaned_data['client']
-            s = int(form.cleaned_data['summa'])
-
-            client = User.objects.filter(user_type = 'CL').get(username=c)
-            client.balance += s
-            client.save()
-
             form.save()
             return HttpResponseRedirect('/cashes/add_in_cashclient?submitted=True')
     else:
@@ -142,28 +124,22 @@ def add_in_cashclient(request):
 
     return render(request, 'cashes/add_in_cashclient.html',context )
 
-# def update_in_cashclient(request, incash_id):
-#     cash = InCashClient.objects.get(pk=incash_id)
-#     form = InCashClientForm(request.POST or None, request.FILES or None, instance=cash)
-#     if form.is_valid():
-#         # p = form.cleaned_data['provider']
-#         # ts = int(form.cleaned_data['body_summa'])
+def update_in_cashclient(request, id):
+    cash = InCashClient.objects.get(pk=id)
+    form = InCashClientForm(request.POST or None, request.FILES or None, instance=cash)
+    if form.is_valid():
 
-#         # provider = User.objects.filter(user_type = 'PR').get(username=p)
-#         # provider.balance = ts
-#         # provider.save()
+        form.save()
+        return redirect('in_cashclient_list')
+    return render(request, 'cashes/update_in_cashclient.html', {
+       'form': form,
+       'cash': cash,
+    })
 
-#         form.save()
-#         return redirect('in_cashclient_list')
-#     return render(request, 'cashes/update_in_cashclient.html', {
-#        'form': form,
-#        'cash': cash,
-#     })
-
-# def delete_in_cashclient(request, web):
-#     cashclient = InCashClient.objects.get(pk=web)
-#     cashclient.delete()
-#     return redirect('in_cashclient_list')
+def delete_in_cashclient(request, id):
+    cash = InCashClient.objects.get(pk=id)
+    cash.delete()
+    return redirect('in_cashclient_list')
 
 
 # Pul chiqimi
@@ -178,17 +154,21 @@ def add_out_cash(request):
     if request.method == "POST":
         form = OutCashForm(request.POST)
         if form.is_valid():
-            t = form.cleaned_data['trader']
-            c = form.cleaned_data['cash']
-            s = int(form.cleaned_data['summa'])
+            # t = form.cleaned_data['trader']
+            # c = form.cleaned_data['cash']
+            # s = int(form.cleaned_data['summa'])
+            # comment = form.cleaned_data['comment']
+            # date = form.cleaned_data['out_date']
+            # qs = Transaction.objects.all()
+            # qs.create(trans_date = date, comment = comment, provider = t, cash = c, cash_summa = s)
 
-            trader = User.objects.filter(user_type = 'PR').get(username=t)
-            trader.balance -= s
-            trader.save()
+            # trader = User.objects.filter(user_type = 'PR').get(username=t)
+            # trader.balance -= s
+            # trader.save()
 
-            cash = Cash.objects.get(name=c)
-            cash.balance -= s
-            cash.save()
+            # cash = Cash.objects.get(name=c)
+            # cash.balance -= s
+            # cash.save()
 
             form.save()
             return HttpResponseRedirect('/cashes/add_out_cash?submitted=True')
@@ -204,16 +184,10 @@ def add_out_cash(request):
 
     return render(request, 'cashes/add_out_cash.html',context )
 
-def update_out_cash(request, cash_id):
-    cash = OutCash.objects.get(pk=cash_id)
+def update_out_cash(request, id):
+    cash = OutCash.objects.get(pk=id)
     form = OutCashForm(request.POST or None, request.FILES or None, instance=cash)
     if form.is_valid():
-        # p = form.cleaned_data['provider']
-        # ts = int(form.cleaned_data['body_summa'])
-
-        # provider = User.objects.filter(user_type = 'PR').get(username=p)
-        # provider.balance = ts
-        # provider.save()
 
         form.save()
         return redirect('out_cash_list')
@@ -222,8 +196,8 @@ def update_out_cash(request, cash_id):
        'cash': cash,
     })
 
-def delete_out_cash(request, cash_id):
-    cash = OutCash.objects.get(pk=cash_id)
+def delete_out_cash(request, id):
+    cash = OutCash.objects.get(pk=id)
     cash.delete()
     return redirect('out_cash_list')
 
@@ -240,12 +214,6 @@ def add_expense(request):
     if request.method == "POST":
         form = ExpenseForm(request.POST)
         if form.is_valid():
-            c = form.cleaned_data['cash']
-            s = int(form.cleaned_data['summa'])
-
-            cash = Cash.objects.get(name=c)
-            cash.balance -= s
-            cash.save()
 
             form.save()
             return HttpResponseRedirect('/cashes/add_expense?submitted=True')
@@ -261,25 +229,19 @@ def add_expense(request):
 
     return render(request, 'cashes/add_expense.html',context )
 
-# def update_expense(request, cash_id):
-#     cash = Expense.objects.get(pk=cash_id)
-#     form = ExpenseForm(request.POST or None, request.FILES or None, instance=cash)
-#     if form.is_valid():
-#         # p = form.cleaned_data['provider']
-#         # ts = int(form.cleaned_data['body_summa'])
+def update_expense(request, id):
+    exp = Expense.objects.get(pk=id)
+    form = ExpenseForm(request.POST or None, request.FILES or None, instance=exp)
+    if form.is_valid():
 
-#         # provider = User.objects.filter(user_type = 'PR').get(username=p)
-#         # provider.balance = ts
-#         # provider.save()
+        form.save()
+        return redirect('expense_list')
+    return render(request, 'cashes/update_expense.html', {
+       'form': form,
+       'exp': exp,
+    })
 
-#         form.save()
-#         return redirect('expense_list')
-#     return render(request, 'cashes/update_expense.html', {
-#        'form': form,
-#        'cash': cash,
-#     })
-
-# def delete_expense(request, cash_id):
-#     cash = Expense.objects.get(pk=cash_id)
-#     cash.delete()
-#     return redirect('expense_list')
+def delete_expense(request, id):
+    exp = Expense.objects.get(pk=id)
+    exp.delete()
+    return redirect('expense_list')
