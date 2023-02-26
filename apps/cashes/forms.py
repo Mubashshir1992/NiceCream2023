@@ -33,7 +33,7 @@ class InCashForm(ModelForm):
             }
         
         widgets = {
-            'in_date': forms.TextInput(attrs={'type' : 'date','class':'form-control', 'placeholder':'Sana'}),
+            'in_date': forms.TextInput(attrs={'type' : 'datetime-local','class':'form-control', 'placeholder':'Sana'}),
             'trader': forms.Select(attrs={'class':'form-control', 'placeholder':'Provider'}),
             'cash': forms.Select(attrs={'class':'form-control', 'placeholder':'Cassa'}),
             'summa': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Summa'}),
@@ -54,7 +54,7 @@ class InCashClientForm(ModelForm):
             }
         
         widgets = {
-            'in_date': forms.TextInput(attrs={'type' : 'date','class':'form-control', 'placeholder':'Sana'}),
+            'in_date': forms.TextInput(attrs={'type' : 'datetime-local','class':'form-control', 'placeholder':'Sana'}),
             'client': forms.Select(attrs={'class':'form-control', 'placeholder':'Client'}),
             'summa': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Summa'}),
             'comment': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Izoh'}),
@@ -74,7 +74,7 @@ class OutCashForm(ModelForm):
             }
         
         widgets = {
-            'out_date': forms.TextInput(attrs={'type' : 'date','class':'form-control', 'placeholder':'Sana'}),
+            'out_date': forms.TextInput(attrs={'type' : 'datetime-local','class':'form-control', 'placeholder':'Sana'}),
             'trader': forms.Select(attrs={'class':'form-control', 'placeholder':'Provider'}),
             'cash': forms.Select(attrs={'class':'form-control', 'placeholder':'Cassa'}),
             'summa': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Summa'}),
@@ -94,7 +94,7 @@ class ExpenseForm(ModelForm):
             }
         
         widgets = {
-            'date': forms.TextInput(attrs={'type' : 'date','class':'form-control', 'placeholder':'Sana'}),
+            'date': forms.TextInput(attrs={'type' : 'datetime-local','class':'form-control', 'placeholder':'Sana'}),
             'cash': forms.Select(attrs={'class':'form-control', 'placeholder':'Cassa'}),
             'summa': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Summa'}),
             'comment': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Izoh'}),

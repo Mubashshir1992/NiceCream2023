@@ -52,7 +52,7 @@ class InProductForm(ModelForm):
             }
         
         widgets = {
-            'in_date': forms.TextInput(attrs={'type' : 'date','class':'form-control', 'placeholder':'Sana'}),
+            'in_date': forms.TextInput(attrs={'type' : 'datetime-local','class':'form-control', 'placeholder':'Sana'}),
             'warehouse': forms.Select(attrs={'class':'form-control', 'placeholder':'Ombor'}),
             'provider': forms.Select(attrs={'class':'form-control', 'placeholder':'Provider'}),
             'product': forms.Select(attrs={'class':'form-control', 'placeholder':'Mahsulot nomi'}),
@@ -92,7 +92,7 @@ class OutProductForm(ModelForm):
             }
         
         widgets = {
-            'out_date': forms.TextInput(attrs={'type' : 'date','class':'form-control', 'placeholder':'Sana'}),
+            'out_date': forms.TextInput(attrs={'type' : 'datetime-local','class':'form-control', 'placeholder':'Sana'}),
             'warehouse': forms.Select(attrs={'class':'form-control', 'placeholder':'Ombor'}),
             'trader': forms.Select(attrs={'class':'form-control', 'placeholder':'Trader'}),
             'client': forms.Select(attrs={'class':'form-control', 'placeholder':'Client'}),
