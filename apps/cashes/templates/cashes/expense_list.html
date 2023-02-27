@@ -21,7 +21,7 @@
       {% for ex in expense_list %}
       <tr>
         <th scope="row">{{ forloop.counter }}</th>
-        <td>{{ ex.date }}</td>
+        <td>{{ ex.date |date:'d-m-Y H:i:s'}}</td>
         <td>{{ ex.cash}}</td>
         <td class="summa">{{ ex.summa}}</td>
         <td>{{ ex.comment }}</td>

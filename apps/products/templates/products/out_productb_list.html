@@ -23,7 +23,7 @@
       {% for product in out_product_list %}
       <tr>
         <th scope="row">{{ forloop.counter }}</th>
-        <td>{{ product.out_date }}</td>
+        <td>{{ product.out_date|date:'d-m-Y H:i:s' }}</td>
         <td>{{ product.warehouse }}</td>
         <td>{{ product.trader }}</td>
         <td>{{ product.summa }}</td>
