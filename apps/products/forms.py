@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.widgets import NumberInput
 from django.forms import ModelForm
-from .models import Product, InProduct, OutProduct
+from .models import Product, InProduct, OutProduct, OutProductB
 
 
 class ProductForm(ModelForm):
@@ -71,6 +71,41 @@ class OutProductForm(ModelForm):
 
     class Meta:
         model = OutProduct
+        fields = ('out_date', 'warehouse', 'trader', 'product', 'quantity', 'body_price', 'body_summa', 'price', 'summa', 'profit', 'comment')
+
+        labels = {
+            'out_date': 'YYYY-MM-DD HH:MM:SS',
+            'warehouse': 'Ombor',
+            'trader': '',
+            'product' : '',
+            'quantity' : '',
+            'body_price' : '',
+            'body_summa' : '',
+            'price' : '',
+            'summa' : '',
+            'profit' : '',
+            'comment' : '',
+            }
+        
+        widgets = {
+            'out_date': forms.TextInput(attrs={'type' : 'datetime-local','class':'form-control', 'placeholder':'Sana'}),
+            'warehouse': forms.Select(attrs={'class':'form-control', 'placeholder':'Ombor'}),
+            'trader': forms.Select(attrs={'class':'form-control', 'placeholder':'Trader'}),
+            'product': forms.Select(attrs={'class':'form-control', 'placeholder':'Mahsulot nomi'}),
+            'quantity': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Soni'}),
+            'body_price': forms.TextInput(attrs={'class':'form-control', 'placeholder':'TanNarxi'}),
+            'body_summa': forms.TextInput(attrs={'class':'form-control', 'placeholder':'TanSumma'}),
+            'price': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Narxi'}),
+            'summa': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Summa'}),
+            'profit': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Foyda'}),
+            'comment': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Izoh'}),
+        }
+
+
+class OutProductBForm(ModelForm):
+
+    class Meta:
+        model = OutProductB
         fields = ('out_date', 'warehouse', 'trader', 'client', 'product', 'quantity', 'body_price', 'body_summa', 'price', 'summa', 'shop_price', 'shop_summa', 'profit', 'sprofit', 'comment')
 
         labels = {

@@ -86,6 +86,8 @@ class Transaction(models.Model):
     summa = models.DecimalField('TransSumma', default=0.0, max_digits=16, decimal_places=2)
     shop_summa = models.DecimalField('TransSSumma', default=0.0, max_digits=16, decimal_places=2, blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
+    profit = models.DecimalField(default=0.0, max_digits=16, decimal_places=2)
+    sprofit = models.DecimalField(default=0.0, max_digits=16, decimal_places=2)
 
     class Meta:
         ordering = ['-trans_date']

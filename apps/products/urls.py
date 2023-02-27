@@ -15,6 +15,9 @@ urlpatterns = [
     path('add_out_product/', views.add_out_product, name='add_out_product'),
     path('update_out_product/<product_id>/', views.update_out_product, name='update_out_product'),
     path('delete_out_product/<product_id>/', views.delete_out_product, name='delete_out_product'),
-    
+    path('out_productb_list/', views.out_productb_list, name='out_productb_list'),
+    path('add_out_productb/', views.add_out_productb, name='add_out_productb'),
+    path('update_out_productb/<product_id>/', views.update_out_productb, name='update_out_productb'),
+    path('delete_out_productb/<product_id>/', views.delete_out_productb, name='delete_out_productb'),
     
 ]

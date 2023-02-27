@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %} <br>
-
 <center>
     {% if user.is_superuser %}
     
@@ -10,10 +9,9 @@
 {% else %}
 <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <h1>Tovar chiqim qilish <input type="submit" value="Saqlash" class="btn btn-outline-success"> </h1> <br><br>      
-    
+    <h1>Tovar chiqim qilish <input type="submit" value="Saqlash" class="btn btn-outline-success"> </h1> <br><br>  
         <div class="row">
-            <div class="col-3">
+            <div class="col-2">
                 <h5>Sana:</h5>
                 {{ sana }}
             </div>
@@ -21,10 +19,14 @@
                 <h5>Omborni tanlang:</h5>
                 {{ ombor }}
             </div>
-            <div class="col-3">
+            <div class="col-2">
                 <h5>Kontragent:</h5>
                 {{ trader }}
             </div>
+            <div class="col-2">
+              <h5>Client:</h5>
+              {{ client }}
+          </div>
             <div class="col-3">
                 <h5>Izoh:</h5>
                 {{ izoh }} <br>
@@ -43,7 +45,10 @@
                         <th scope="col">Tansumma</th>
                         <th scope="col">Narxi</th>
                         <th scope="col">Summa</th>
+                        <th scope="col">Snarxi</th>
+                        <th scope="col">Ssumma</th>
                         <th scope="col">Foyda</th>
+                        <th scope="col">Sfoyda</th>
                       </tr>
                     </thead>
                     <tbody id="mytable" class="table-group-divider">
@@ -56,10 +61,12 @@
                         <td id="tansum" class="tansumma" onchange="quantityfunc()">{{ tansumma }}</td>
                         <td id="narxi" onchange="quantityfunc()">{{ narxi }}</td>
                         <td id="sum" class="summa" onchange="quantityfunc()">{{ summa }}</td>
+                        <td id="snarxi" onchange="quantityfunc()">{{ snarxi }}</td>
+                        <td id="ssum" class="ssumma" onchange="quantityfunc()">{{ ssumma }}</td>
                         <td id="foyda" class="clsfoyda">{{ foyda }}</td>
+                        <td id="sfoyda" class="clssfoyda" >{{ sfoyda }}</td>
                       </tr>
                       <tr class="table-dark border-primary fs-5 fw-bold">
-                        
                         <td colspan="2">Total</td>
                         <td></td>
                         <td></td>
@@ -67,20 +74,22 @@
                         <td id="total_tansum"></td>
                         <td></td>
                         <td id="total_sum"></td>
+                        <td></td>
+                        <td id="total_ssum"></td>
                         <td id="total_foyda"></td>
+                        <td id="total_sfoyda"></td>
                       </tr>
                     </tbody>
                   </table>
             </div>
-            
         </div>
-    
 </form>
 {% endif %}
 {% else %} 
 <h1>Kechirasiz sizning bunday huquqingiz yo'q!</h1>
 
 {% endif %}
+
 
 </center>
 
@@ -90,15 +99,22 @@
   var summa = document.getElementsByClassName('summa');
   var total_tansum = document.getElementById('total_tansum');
   var tansumma = document.getElementsByClassName('tansumma');
+  var total_ssum = document.getElementById('total_ssum');
+  var ssumma = document.getElementsByClassName('ssumma');
   var total_foyda = document.getElementById('total_foyda');
   var clsfoyda = document.getElementsByClassName('clsfoyda');
+  var total_sfoyda = document.getElementById('total_sfoyda');
+  var clssfoyda = document.getElementsByClassName('clssfoyda');
 
   var soni = document.getElementById('soni');
   var tannarxi = document.getElementById('tannarxi');
   var tansum = document.getElementById('tansum');
   var narxi = document.getElementById('narxi');
   var sum = document.getElementById('sum');
+  var snarxi = document.getElementById('snarxi');
+  var ssum = document.getElementById('ssum');
   var foyda = document.getElementById('foyda');
+  var sfoyda = document.getElementById('sfoyda');
 
   function totalResult(element_id, element_class){
       var cal = 0;
@@ -113,14 +129,19 @@
   function quantityfunc(){
       tansum.children[0].value = parseInt(tannarxi.children[0].value)*parseInt(soni.children[0].value);
       sum.children[0].value = parseInt(narxi.children[0].value)*parseInt(soni.children[0].value);
+      ssum.children[0].value = parseInt(snarxi.children[0].value)*parseInt(soni.children[0].value);
       foyda.children[0].value = parseInt(sum.children[0].value)-parseInt(tansum.children[0].value);
+      sfoyda.children[0].value = parseInt(ssum.children[0].value)-parseInt(sum.children[0].value);
       totalResult(total_sum, summa);
       totalResult(total_tansum, tansumma);
+      totalResult(total_ssum, ssumma);
       totalResult(total_foyda, clsfoyda);
+      totalResult(total_sfoyda, clssfoyda);
     }
   function summafunc(){
       tannarxi.children[0].value = parseInt(tansum.children[0].value)/parseInt(soni.children[0].value);
       narxi.children[0].value = parseInt(sum.children[0].value)/parseInt(soni.children[0].value);
+      snarxi.children[0].value = parseInt(ssum.children[0].value)/parseInt(soni.children[0].value);
   }
 
   

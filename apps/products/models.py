@@ -58,12 +58,37 @@ class InProduct(models.Model):
     shop_summa = models.IntegerField('Ssumma', )
     comment = models.TextField(blank=True, null=True, default='Tovar kirimi',)
 
+    class Meta:
+        ordering = ['-in_date']
+
     def __str__(self):
         return self.provider.username
 
 
 #Tovar chiqim qilish
 class OutProduct(models.Model):
+
+    out_date = models.DateTimeField('Sana',)
+    trader = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="buyer", limit_choices_to ={'user_type':'PR'})
+    warehouse = models.ForeignKey(Warehouse, blank=True, null=True, on_delete= models.CASCADE)
+    product = models.ForeignKey(Product, blank=True, null=True, on_delete= models.CASCADE)
+    quantity = models.IntegerField('Soni',  )
+    body_price = models.IntegerField('Tannarxi',  )
+    body_summa = models.IntegerField('TanSumma',  )
+    price = models.IntegerField('Narxi',  )
+    summa = models.IntegerField('Summa',  )
+    profit = models.IntegerField('Foyda', )
+    comment = models.TextField(blank=True, null=True, default='Tovar chiqimi',)
+
+    class Meta:
+        ordering = ['-out_date']
+
+    def __str__(self):
+        return self.trader.username
+
+
+# B Tovar chiqim qilish
+class OutProductB(models.Model):
 
     out_date = models.DateTimeField('Sana',)
     trader = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="buyer_seller", limit_choices_to ={'user_type':'PR'})
@@ -79,7 +104,10 @@ class OutProduct(models.Model):
     shop_summa = models.IntegerField('Ssumma', )
     profit = models.IntegerField('Foyda', )
     sprofit = models.IntegerField('Sfoyda', )
-    comment = models.TextField(blank=True, null=True, default='Tovar chiqimi',)
+    comment = models.TextField(blank=True, null=True, default='Tovar chiqimi B',)
+
+    class Meta:
+        ordering = ['-out_date']
 
     def __str__(self):
-        return self.trader.username
+        return self.client.username

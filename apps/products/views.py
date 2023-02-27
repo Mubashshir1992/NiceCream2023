@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import InProduct, Product, Warehouse, OutProduct
-from .forms import ProductForm, InProductForm, OutProductForm
+from .models import InProduct, Product, Warehouse, OutProduct, OutProductB
+from .forms import ProductForm, InProductForm, OutProductForm, OutProductBForm
 from django.http import HttpResponseRedirect
 from django.db.models import Avg, Count, Max, Min, Sum
 from apps.accounts.models import User
@@ -21,16 +21,6 @@ def add_in_product(request):
     if request.method == "POST":
         form = InProductForm(request.POST)
         if form.is_valid():
-            p = form.cleaned_data['provider']
-            bs = int(form.cleaned_data['body_summa'])
-            comment = form.cleaned_data['comment']
-            date = form.cleaned_data['in_date']
-            qs = Transaction.objects.all()
-            qs.create(trans_date = date, comment = comment, provider = p, body_summa = bs)
-
-            provider = User.objects.filter(user_type = 'PR').get(username=p)
-            provider.balance += bs
-            provider.save()
 
             form.save()
             return HttpResponseRedirect('/products/add_in_product?submitted=True')
@@ -62,12 +52,6 @@ def update_in_product(request, product_id):
     product = InProduct.objects.get(pk=product_id)
     form = InProductForm(request.POST or None, request.FILES or None, instance=product)
     if form.is_valid():
-        # p = form.cleaned_data['provider']
-        # ts = int(form.cleaned_data['body_summa'])
-
-        # provider = User.objects.filter(user_type = 'PR').get(username=p)
-        # provider.balance = ts
-        # provider.save()
 
         form.save()
         return redirect('in_product_list')
@@ -94,36 +78,66 @@ def add_out_product(request):
     if request.method == "POST":
         form = OutProductForm(request.POST)
         if form.is_valid():
-            t = form.cleaned_data['trader']
-            c = form.cleaned_data['client']
-            s = int(form.cleaned_data['summa'])
-            ss = int(form.cleaned_data['shop_summa'])
-            comment = form.cleaned_data['comment']
-            date = form.cleaned_data['out_date']
-            qs = Transaction.objects.all()
-            qs.create(trans_date = date, comment = comment, provider = t, client = c, summa = s, shop_summa = ss)
-            # p = form.cleaned_data['product']
-            # q= form.cleaned_data['quantity']
-            # w= form.cleaned_data['warehouse']
-            # bs = int(form.cleaned_data['body_summa'])
-
-            # product = InProduct.objects.filter(warehouse=w, product=p)
-            # product.quantity -= q
-            # product.body_summa -= bs
-            # product.save()
-            
-            trader = User.objects.filter(user_type = 'PR').get(username=t)
-            trader.balance -= s
-            trader.save()
-
-            client = User.objects.filter(user_type = 'CL').get(username=c)
-            client.balance -= ss
-            client.save()
-
+           
             form.save()
-            return HttpResponseRedirect('/products/add_out_product?submitted=True')
+            return HttpResponseRedirect('/products/out_product_list?submitted=True')
     else:
         form = OutProductForm()
+        if 'submitted' in request.GET:
+            submitted = True
+
+    context = {
+        'form': form,
+        'submitted': submitted,
+        'sana' : form['out_date'],
+        'trader' : form['trader'],
+        'ombor' : form['warehouse'],
+        'tovar' : form['product'],
+        'soni' : form['quantity'],
+        'tannarxi' : form['body_price'],
+        'tansumma' : form['body_summa'],
+        'narxi' : form['price'],
+        'summa' : form['summa'],
+        'foyda' : form['profit'],
+        'izoh' : form['comment'],
+    }
+
+    return render(request, 'products/add_out_product.html',context )
+
+def update_out_product(request, product_id):
+    product = OutProduct.objects.get(pk=product_id)
+    form = OutProductForm(request.POST or None, request.FILES or None, instance=product)
+    if form.is_valid():
+            form.save()
+            return redirect('out_product_list')
+    return render(request, 'products/update_out_product.html', {
+       'form': form,
+       'product': product,
+    })
+
+def delete_out_product(request, product_id):
+    product = OutProduct.objects.get(pk=product_id)
+    product.delete()
+    return redirect('out_product_list')
+
+
+# Tovar chiqimi B
+def out_productb_list(request):
+    out_product_list = OutProductB.objects.all().order_by('-out_date')
+    return render(request, 'products/out_productb_list.html', {
+        'out_product_list' : out_product_list,
+    })
+
+def add_out_productb(request):
+    submitted = False
+    if request.method == "POST":
+        form = OutProductBForm(request.POST)
+        if form.is_valid():
+           
+            form.save()
+            return HttpResponseRedirect('/products/out_productb_list?submitted=True')
+    else:
+        form = OutProductBForm()
         if 'submitted' in request.GET:
             submitted = True
 
@@ -147,23 +161,24 @@ def add_out_product(request):
         'izoh' : form['comment'],
     }
 
-    return render(request, 'products/add_out_product.html',context )
+    return render(request, 'products/add_out_productb.html',context )
 
-def update_out_product(request, product_id):
-    product = OutProduct.objects.get(pk=product_id)
-    form = OutProductForm(request.POST or None, request.FILES or None, instance=product)
+def update_out_productb(request, product_id):
+    product = OutProductB.objects.get(pk=product_id)
+    form = OutProductBForm(request.POST or None, request.FILES or None, instance=product)
     if form.is_valid():
             form.save()
-            return redirect('out_product_list')
-    return render(request, 'products/update_out_product.html', {
+            return redirect('out_productb_list')
+    return render(request, 'products/update_out_productb.html', {
        'form': form,
        'product': product,
     })
 
-def delete_out_product(request, product_id):
-    product = OutProduct.objects.get(pk=product_id)
+def delete_out_productb(request, product_id):
+    product = OutProductB.objects.get(pk=product_id)
     product.delete()
-    return redirect('out_product_list')
+    return redirect('out_productb_list')
+
 
 
 # Ombor
