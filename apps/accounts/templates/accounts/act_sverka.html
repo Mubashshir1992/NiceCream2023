@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+<br>
+{% if provider %}
+<h1>"{{ provider }}" bo'yicha Akt sverka. {{ fromdate}} dan {{ todate }} gacha</h1> <br>
+{% else %}
+<h1> Akt sverka </h1> <br>
+{% endif %}
+<form class="d-flex" action="" method="POST">
+  {% csrf_token %}
+  <input type="date" class="form-control" name="fromdate" id="fromdate">
+  <input type="date" class="form-control ms-3" name="todate" id="todate">
+  <select name="provider" id="provider_id" class="form-select ms-3" aria-label="select example">
+  <option value="" hidden>Providerni tanlang</option>
+    {% for x in providers %}
+      <option value="{{ x }}">{{ x }}</option>
+    {% endfor %}
+  </select>
+  <button class="btn btn-outline-success ms-3" type="submit">Select</button>
+</form>
+<br>
+
+
+<table id="table" class="table table-striped table-hover table-bordered">
+    <thead class="table-info fs-5 fw-bold">
+      <tr>
+        <th scope="col">№</th>
+        <th scope="col">Sana</th>
+        <th scope="col">Izoh</th>
+        <th scope="col">Summa</th>
+        <th scope="col">Qoldiq</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for q in qs %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ q.trans_date }}</td>
+        <td>{{ q.comment }}</td>
+        <td class="balans">{{ q.summa }}</td>
+        <td></td>
+      </tr>
+      {% endfor %}
+      <tr class="table-dark border-primary fs-5 fw-bold">
+        <td>Total</td>
+        <td></td>
+        <td></td>
+        <td id="total"></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script type="text/javascript">
+    
+    let total = document.getElementById('total');
+    let balans = document.getElementsByClassName('balans');
+    let cal = 0;
+    for(let i=0; i<balans.length; i++){
+        cal +=  parseInt(balans[i].innerHTML);
+    }
+    total.innerHTML = cal;
+
+    let date = new Date();
+    let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    if (month < 10) month = "0" + month;
+    let today = year + "-" + month + "-" + day; 
+    let fd = year + "-" + month + "-" + "01";   
+
+  
+    document.getElementById("todate").value = today;
+    document.getElementById("fromdate").value = fd;
+  </script>
+</div>  
+{% endblock content %}

@@ -1,13 +1,13 @@
 from django import forms
 from django.forms.widgets import NumberInput
 from django.forms import ModelForm
-from .models import Product, InProduct, OutProduct, OutProductB
+from .models import Product, InProduct, OutProduct, OutProductB, WarehouseName
 
 
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields = ('name', 'capacity', 'brand', 'product_size', 'product_weight', 'code', 'image' , 'about')
+        fields = ('name', 'capacity', 'brand', 'product_size', 'product_weight', 'code', 'image' , 'price', 's_price' , 'about')
 
         labels = {
             'name': '',
@@ -18,6 +18,8 @@ class ProductForm(ModelForm):
             'code': '',
             'image': 'Tovar rasmi',
             'about': '',
+            'price': '',
+            's_price': '',
             }
         
         widgets = {
@@ -27,7 +29,9 @@ class ProductForm(ModelForm):
             'product_size': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Tovar hajmi'}),
             'product_weight': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Tovar og`irligi'}),
             'code': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Mahsulot kodi'}),
-            'about': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Mahsulot haqida'}),
+            'about': forms.Textarea(attrs={'rows':3,'class':'form-control', 'placeholder':'Mahsulot haqida'}),
+            'price': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Tavsiya narxi'}),
+            's_price': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Tavsiya snarxi'}),
         }
 
 
@@ -143,3 +147,20 @@ class OutProductBForm(ModelForm):
             'sprofit': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Sfoyda'}),
             'comment': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Izoh'}),
         }
+
+
+class WarehouseNameForm(ModelForm):
+    class Meta:
+        model = WarehouseName
+        fields = ('name', 'warehouse_size',)
+
+        labels = {
+            'name': '',
+            'warehouse_size': '',
+            }
+        
+        widgets = {
+            'name': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Ombor nomi'}),
+            'warehouse_size': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Ombor hajmi'}),
+        }
+

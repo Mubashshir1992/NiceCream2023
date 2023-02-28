@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import InProduct, Product, Warehouse, OutProduct, OutProductB
-from .forms import ProductForm, InProductForm, OutProductForm, OutProductBForm
+from .models import InProduct, Product, WarehouseName, OutProduct, OutProductB, Warehouse
+from .forms import ProductForm, InProductForm, OutProductForm, OutProductBForm, WarehouseNameForm
 from django.http import HttpResponseRedirect
 from django.db.models import Avg, Count, Max, Min, Sum
 from apps.accounts.models import User
@@ -74,6 +74,11 @@ def out_product_list(request):
     })
 
 def add_out_product(request):
+    
+    initial_date={
+        'body_price':'',
+        'price':'',
+    }
     submitted = False
     if request.method == "POST":
         form = OutProductForm(request.POST)
@@ -82,7 +87,7 @@ def add_out_product(request):
             form.save()
             return HttpResponseRedirect('/products/out_product_list?submitted=True')
     else:
-        form = OutProductForm()
+        form = OutProductForm(initial=initial_date)
         if 'submitted' in request.GET:
             submitted = True
 
@@ -182,13 +187,54 @@ def delete_out_productb(request, product_id):
 
 
 # Ombor
+def warehouse_name_list(request):
+    warehouse_list = WarehouseName.objects.all()
+    return render(request, 'products/warehouse_list.html', {
+        'warehouse_list' : warehouse_list,
+    })
+
+def add_warehouse_name(request):
+    submitted = False
+    if request.method == "POST":
+        form = WarehouseNameForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('warehouse_list')
+    else:
+        form = WarehouseNameForm()
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, 'products/add_warehouse_name.html', {
+        'form': form,
+       'submitted': submitted
+    })
+
+def update_warehouse_name(request, warehouse_id):
+    warehouse = WarehouseName.objects.get(pk=warehouse_id)
+    form = WarehouseNameForm(request.POST or None, request.FILES or None, instance=warehouse)
+    if form.is_valid():
+            form.save()
+            return redirect('warehouse_list')
+    return render(request, 'products/update_warehouse_name.html', {
+       'form': form,
+       'warehouse': warehouse,
+    })
+
+def delete_warehouse_name(request, warehouse_id):
+    warehouse = WarehouseName.objects.get(pk=warehouse_id)
+    warehouse.delete()
+    return redirect('warehouse_list')
+
+
+
+
 def warehouse(request):
-    warehouses = Warehouse.objects.all()
+    warehouses = WarehouseName.objects.all()
     data = []
     
     if request.method == "POST":
         selected = request.POST['selected']
-        qs = InProduct.objects.filter(warehouse__name=selected)
+        qs = Warehouse.objects.filter(warehouse__name=selected)
         
         for item in qs:
             name = item.product.name
@@ -210,7 +256,7 @@ def warehouse(request):
                     "total_size": item.product.product_size,
                     "total_weight": item.product.product_weight,
                     })
-        size = Warehouse.objects.filter(name=selected).values()
+        size = WarehouseName.objects.filter(name=selected).values()
 
         return render(request, 'products/warehouse.html', {
             'warehouses': warehouses,
@@ -223,6 +269,7 @@ def warehouse(request):
 
 
 # Tovar hosil qilish
+
 def product_name_list(request):
     product_list = Product.objects.all()
     return render(request, 'products/product_list.html', {
@@ -235,7 +282,7 @@ def add_product_name(request):
         form = ProductForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/add_product_name?submitted=True')
+            return redirect('product_list')
     else:
         form = ProductForm()
         if 'submitted' in request.GET:
@@ -260,4 +307,43 @@ def delete_product_name(request, product_id):
     product = Product.objects.get(pk=product_id)
     product.delete()
     return redirect('product_list')
+
+# def warehouseold(request):
+#     warehouses = WarehouseName.objects.all()
+#     data = []
+    
+#     if request.method == "POST":
+#         selected = request.POST['selected']
+#         qs = InProduct.objects.filter(warehouse__name=selected)
+        
+#         for item in qs:
+#             name = item.product.name
+#             if name in [x['name'] for x in data]:
+#                 for x in data:     
+#                     if x['name'] == name:
+#                         x['total_soni'] += item.quantity
+#                         x['total_sum'] += item.body_summa
+#                         # x['total_narxi'] += item.body_summa/item.quantity
+#                         x['total_size'] += item.product.product_size
+#                         x['total_weight'] += item.product.product_weight
+#             else:
+#                 data.append({
+#                     "id": item.id,
+#                     "name": item.product.name,
+#                     "total_soni": item.quantity,
+#                     "total_narxi": item.body_price,
+#                     "total_sum": item.body_summa,
+#                     "total_size": item.product.product_size,
+#                     "total_weight": item.product.product_weight,
+#                     })
+#         size = WarehouseName.objects.filter(name=selected).values()
+
+#         return render(request, 'products/warehouse.html', {
+#             'warehouses': warehouses,
+#             'selected' : selected,
+#             'results': data,
+#             'size' : size,
+#         })
+#     else:
+#         return render(request, 'products/warehouse.html', {'warehouses': warehouses, 'results': data,})
 

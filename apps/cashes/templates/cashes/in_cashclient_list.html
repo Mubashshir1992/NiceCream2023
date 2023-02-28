@@ -21,7 +21,7 @@
       {% for cash in in_cashclient_list %}
       <tr>
         <th scope="row">{{ forloop.counter }}</th>
-        <td>{{ cash.in_date }}</td>
+        <td>{{ cash.in_date|date:'d-m-Y H:i:s' }}</td>
         <td>{{ cash.client }}</td>
         <td>{{ cash.ssumma}}</td>
         <td>{{ cash.comment }}</td>

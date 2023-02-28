@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import CustomUserCreateonForm
 from .models import User
+from apps.cashes.models import Transaction
 
 # Create your views here.
 def login_user(request):
@@ -60,4 +61,27 @@ def clients(request):
     clients = User.objects.exclude(balance = 0).filter(user_type = 'CL')
     return render(request, 'accounts/clients.html', {
         'clients' : clients,
+    })
+
+
+# Akt sverka Provider
+def act_sverka(request):
+        providers = User.objects.filter(user_type = 'PR')
+        provider = None
+        todate = None
+        fromdate = None
+        qs = None
+        if request.method == "POST":
+            provider = request.POST['provider']
+            fromdate = request.POST['fromdate']
+            todate = request.POST['todate']
+            qs = Transaction.objects.filter(provider__username=provider, trans_date__lte = todate, trans_date__gte = fromdate,)
+
+        return render(request, 'accounts/act_sverka.html', {
+        'providers' : providers,
+        'provider' : provider,
+        'todate' : todate,
+        'fromdate' : fromdate,
+        'qs' : qs,
+
     })

@@ -1,5 +1,6 @@
 from django.db import models
 from apps.accounts.models import User
+import uuid
 
 # Create your models here.
 
@@ -27,13 +28,15 @@ class Product(models.Model):
     code = models.IntegerField('Kodi', blank=True, null=True,)
     image = models.ImageField(blank=True, null=True)
     about = models.TextField(blank=True, null=True)
+    price = models.IntegerField('Narxi',  blank=True, null=True,)
+    s_price = models.IntegerField('Snarxi',  blank=True, null=True,)
 
     def __str__(self):
         return self.name
 
 
 #Omborlar
-class Warehouse(models.Model):
+class WarehouseName(models.Model):
 
     name = models.CharField('Ombor Nomi', max_length=50)
     warehouse_size = models.FloatField(blank=True, null=True,)
@@ -44,10 +47,10 @@ class Warehouse(models.Model):
 
 #Tovar kirim qilish
 class InProduct(models.Model):
-
+    event_id = models.UUIDField(default=uuid.uuid4, blank=True, null=True,)
     in_date = models.DateTimeField('Sana',)
     provider = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="buy_provider", limit_choices_to ={'user_type':'PR'})
-    warehouse = models.ForeignKey(Warehouse, blank=True, null=True, on_delete= models.CASCADE)
+    warehouse = models.ForeignKey(WarehouseName, blank=True, null=True, on_delete= models.CASCADE)
     product = models.ForeignKey(Product, blank=True, null=True, on_delete= models.CASCADE)
     quantity = models.IntegerField('Soni', )
     body_price = models.IntegerField('Tannarxi',  )
@@ -67,10 +70,10 @@ class InProduct(models.Model):
 
 #Tovar chiqim qilish
 class OutProduct(models.Model):
-
+    event_id = models.UUIDField(default=uuid.uuid4, blank=True, null=True,)
     out_date = models.DateTimeField('Sana',)
     trader = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="buyer", limit_choices_to ={'user_type':'PR'})
-    warehouse = models.ForeignKey(Warehouse, blank=True, null=True, on_delete= models.CASCADE)
+    warehouse = models.ForeignKey(WarehouseName, blank=True, null=True, on_delete= models.CASCADE)
     product = models.ForeignKey(Product, blank=True, null=True, on_delete= models.CASCADE)
     quantity = models.IntegerField('Soni',  )
     body_price = models.IntegerField('Tannarxi',  )
@@ -89,11 +92,11 @@ class OutProduct(models.Model):
 
 # B Tovar chiqim qilish
 class OutProductB(models.Model):
-
+    event_id = models.UUIDField(default=uuid.uuid4,  blank=True, null=True)
     out_date = models.DateTimeField('Sana',)
     trader = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="buyer_seller", limit_choices_to ={'user_type':'PR'})
     client = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="shopkeeper", limit_choices_to ={'user_type':'CL'})
-    warehouse = models.ForeignKey(Warehouse, blank=True, null=True, on_delete= models.CASCADE)
+    warehouse = models.ForeignKey(WarehouseName, blank=True, null=True, on_delete= models.CASCADE)
     product = models.ForeignKey(Product, blank=True, null=True, on_delete= models.CASCADE)
     quantity = models.IntegerField('Soni',  )
     body_price = models.IntegerField('Tannarxi',  )
@@ -111,3 +114,26 @@ class OutProductB(models.Model):
 
     def __str__(self):
         return self.client.username
+
+
+#Omborlar 
+class Warehouse(models.Model):
+
+    event_id = models.CharField(max_length=50, blank=True, null=True)
+    date = models.DateTimeField('Sana',blank=True, null=True,)
+    warehouse = models.ForeignKey(WarehouseName, blank=True, null=True, on_delete= models.CASCADE)
+    product = models.ForeignKey(Product, blank=True, null=True, on_delete= models.CASCADE)
+    quantity = models.IntegerField('Soni', blank=True, null=True,)
+    body_price = models.IntegerField('Tannarxi',  blank=True, null=True,)
+    body_summa = models.IntegerField('TanSumma',  blank=True, null=True,)
+    price = models.IntegerField('Narxi',  blank=True, null=True,)
+    summa = models.IntegerField('Summa',  blank=True, null=True,)
+    shop_price = models.IntegerField('Snarxi',  blank=True, null=True,)
+    shop_summa = models.IntegerField('Ssumma', blank=True, null=True,)
+    comment = models.TextField(blank=True, null=True,)
+
+    class Meta:
+        ordering = ['product']
+
+    def __str__(self):
+        return self.comment

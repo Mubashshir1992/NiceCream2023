@@ -22,7 +22,7 @@
       {% for cash in in_cash_list %}
       <tr>
         <th scope="row">{{ forloop.counter }}</th>
-        <td>{{ cash.in_date }}</td>
+        <td>{{ cash.in_date|date:'d-m-Y H:i:s' }}</td>
         <td>{{ cash.trader }}</td>
         <td>{{ cash.cash}}</td>
         <td>{{ cash.summa}}</td>
