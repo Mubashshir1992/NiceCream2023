@@ -10,7 +10,7 @@ class CashForm(ModelForm):
 
         labels = {
             'name': '',
-            'balance': '',
+            'balance': "Kassa qoldig'i",
             }
         
         widgets = {

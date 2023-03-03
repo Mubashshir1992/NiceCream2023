@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container">
 <br>
 <h1>Mahsulotlar  <a href="{% url 'add_product_name' %}" class="btn btn-outline-success btn-sm mx-1">Add new</a></h1> <br>
 
@@ -37,5 +38,5 @@
       {% endfor %}
     </tbody>
   </table>
-
+</div>
 {% endblock content %}

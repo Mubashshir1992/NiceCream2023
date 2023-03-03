@@ -20,7 +20,7 @@ def add_cash_name(request):
         form = CashForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/add_cash_name?submitted=True')
+            return redirect('cash_list')
     else:
         form = CashForm()
         if 'submitted' in request.GET:
@@ -60,7 +60,7 @@ def add_in_cash(request):
         form = InCashForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/cashes/add_in_cash?submitted=True')
+            return redirect('in_cash_list')
     else:
         form = InCashForm()
         if 'submitted' in request.GET:
@@ -75,13 +75,6 @@ def add_in_cash(request):
 
 def update_in_cash(request, id):
     cash = InCash.objects.get(pk=id)
-    # trader = User.objects.filter(user_type = 'PR').get(username=cash.trader)
-    # trader.balance -= int(cash.summa)
-    # trader.save()
-
-    # c = Cash.objects.get(name=cash.cash)
-    # c.balance -= int(cash.summa)
-    # c.save() 
     form = InCashForm(request.POST or None, request.FILES or None, instance=cash)
     if form.is_valid():
 
@@ -111,7 +104,7 @@ def add_in_cashclient(request):
         form = InCashClientForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/cashes/add_in_cashclient?submitted=True')
+            return redirect('in_cashclient_list')
     else:
         form = InCashClientForm()
         if 'submitted' in request.GET:
@@ -171,7 +164,7 @@ def add_out_cash(request):
             # cash.save()
 
             form.save()
-            return HttpResponseRedirect('/cashes/add_out_cash?submitted=True')
+            return redirect('out_cash_list')
     else:
         form = OutCashForm()
         if 'submitted' in request.GET:
@@ -216,7 +209,7 @@ def add_expense(request):
         if form.is_valid():
 
             form.save()
-            return HttpResponseRedirect('/cashes/add_expense?submitted=True')
+            return redirect('expense_list')
     else:
         form = ExpenseForm()
         if 'submitted' in request.GET:

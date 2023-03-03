@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container">
 {% if user.is_superuser %}
-<h1>Update Warehouse Name...</h1>
+<br> <h1>Update Warehouse Name...</h1> <br>
 <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }} <br>
     <input type="submit" value="Update" class="btn btn-secondary">
 </form>
 {% endif %}
+</div>
 {% endblock content %}

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %} <br>
+<div class="container">
 <center>
     {% if user.is_superuser %}
     <h1>Kassa nomini qo'shish</h1><br><br>
@@ -18,5 +19,5 @@
 
 {% endif %}
 </center>
-
+</div>
 {% endblock content %}
