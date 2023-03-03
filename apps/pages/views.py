@@ -4,6 +4,7 @@ from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.urls import reverse_lazy
 from django.urls import reverse
 from .models import UserPost, Comment
+from .forms import UserPostForm
 
 # Create your views here.
 
@@ -17,7 +18,7 @@ class PostDetailView(DetailView):
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin ,UpdateView):
     model = UserPost
-    fields = ('title', 'body', 'photo', 'body2', 'photo2', 'body3', 'photo3', 'body4', 'photo4')
+    form_class = UserPostForm
     template_name = 'post_edit.html'
 
     def test_func(self):
@@ -35,7 +36,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin ,DeleteView):
 
 class PostCreateView(LoginRequiredMixin, UserPassesTestMixin ,CreateView):
     model = UserPost
-    fields = ('title', 'body', 'photo', 'body2', 'photo2', 'body3', 'photo3', 'body4', 'photo4')
+    form_class = UserPostForm
     template_name = 'post_new.html'
 
     def form_valid(self, form):

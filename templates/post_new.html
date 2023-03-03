@@ -1,10 +1,7 @@
-{% extends 'home.html' %}
-
-
-{% block title %}Maqola qo'shish{% endblock title %}
-
+{% extends 'base.html' %}
 {% block content %}
-<h2 class="text-info">Yangi maqola qo'shish</h2>
+<div class="container">
+ <br> <h2 class="text-info">Yangi maqola qo'shish</h2> <br>
 <form method="post" enctype="multipart/form-data"> {% csrf_token %}
     
     {{ form.as_p }}
@@ -12,6 +9,5 @@
     <button type="submit" class="btn btn-outline-success mt-3">Saqlash</button>
 
 </form>
-
-
+</div>
 {% endblock content %}

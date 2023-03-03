@@ -3,21 +3,11 @@
 {% block content %}
 <div class="container">
 <br>
-{% if provider %}
-<h1>"{{ provider }}" bo'yicha Akt sverka. {{ fromdate}} dan {{ todate }} gacha</h1> <br>
-{% else %}
-<h1> Akt sverka </h1> <br>
-{% endif %}
+<h1>Akt sverka. {{ fromdate}} dan {{ todate }} gacha</h1> <br>
 <form class="d-flex" action="" method="POST">
   {% csrf_token %}
   <input type="date" class="form-control" name="fromdate" id="fromdate">
   <input type="date" class="form-control ms-3" name="todate" id="todate">
-  <select name="provider" id="provider_id" class="form-select ms-3" aria-label="select example">
-  <option value="" hidden>Providerni tanlang</option>
-    {% for x in providers %}
-      <option value="{{ x }}">{{ x }}</option>
-    {% endfor %}
-  </select>
   <button class="btn btn-outline-success ms-3" type="submit">Select</button>
 </form>
 <br>
@@ -39,7 +29,12 @@
         <th scope="row">{{ forloop.counter }}</th>
         <td>{{ q.trans_date }}</td>
         <td>{{ q.comment }}</td>
+        {% if q.summa %}
         <td class="balans">{{ q.summa }}</td>
+        {% endif %}
+        {% if q.ssumma %}
+        <td class="balans">{{ q.ssumma }}</td>
+        {% endif %}
         <td></td>
       </tr>
       {% endfor %}

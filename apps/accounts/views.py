@@ -5,6 +5,7 @@ from django.contrib import messages
 from .forms import CustomUserCreateonForm
 from .models import User
 from apps.cashes.models import Transaction
+import datetime
 
 # Create your views here.
 def login_user(request):
@@ -85,3 +86,55 @@ def act_sverka(request):
         'qs' : qs,
 
     })
+
+
+ # Akt sverka Client
+def act_sverka_client(request):
+        clients = User.objects.filter(user_type = 'CL')
+        client = None
+        todate = None
+        fromdate = None
+        qs = None
+        if request.method == "POST":
+            client = request.POST['client']
+            fromdate = request.POST['fromdate']
+            todate = request.POST['todate']
+            qs = Transaction.objects.filter(client__username=client, trans_date__lte = todate, trans_date__gte = fromdate,)
+
+        return render(request, 'accounts/act_sverka_client.html', {
+        'clients' : clients,
+        'client' : client,
+        'todate' : todate,
+        'fromdate' : fromdate,
+        'qs' : qs,
+
+    })  
+
+
+# MY Akt sverka
+def my_act_sverka(request):
+        me = request.user.id
+        pr_id = User.objects.filter(user_type = 'PR').values_list('id', flat=True)
+        cl_id = User.objects.filter(user_type = 'CL').values_list('id', flat=True)
+        today = datetime.date.today()
+        todate = today + datetime.timedelta(days=1)
+        fromdate = today.replace(day=1)
+        if me in pr_id:
+            qs = Transaction.objects.filter(provider_id=me, trans_date__lte = todate, trans_date__gte = fromdate,)
+        if me in cl_id:
+            qs = Transaction.objects.filter(client_id=me, trans_date__lte = todate, trans_date__gte = fromdate,)
+            
+        if request.method == "POST":
+            fromdate = request.POST['fromdate']
+            todate = request.POST['todate']
+            if me in pr_id:
+                qs = Transaction.objects.filter(provider_id=me, trans_date__lte = todate, trans_date__gte = fromdate,)
+            if me in cl_id:
+                qs = Transaction.objects.filter(client_id=me, trans_date__lte = todate, trans_date__gte = fromdate,)
+
+        return render(request, 'accounts/my_act_sverka.html', {
+        'todate' : todate,
+        'fromdate' : fromdate,
+        'qs' : qs,
+
+    })  
