@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cash, InCash, InCashClient, Expense, Transaction, OutCash
+from .models import Cash, InCash, InCashClient, Expense, Transaction, OutCash, OutCashClient
 
 class InCashAdmin(admin.ModelAdmin):
     model = InCash
@@ -13,6 +13,10 @@ class OutCashAdmin(admin.ModelAdmin):
     model = OutCash
     list_display = ['cash', 'out_date', 'trader', 'summa', 'comment',]
 
+class OutCashClientAdmin(admin.ModelAdmin):
+    model = OutCashClient
+    list_display = ['out_date', 'client', 'ssumma', 'comment',]
+
 class ExpenseAdmin(admin.ModelAdmin):
     model = Expense
     list_display = ['cash', 'date', 'summa', 'comment',]   
@@ -25,6 +29,7 @@ class TransactionAdmin(admin.ModelAdmin):
 admin.site.register(Cash)
 admin.site.register(InCash, InCashAdmin)
 admin.site.register(OutCash, OutCashAdmin)
+admin.site.register(OutCashClient, OutCashClientAdmin)
 admin.site.register(InCashClient, InCashClientAdmin)
 admin.site.register(Expense, ExpenseAdmin)
 admin.site.register(Transaction, TransactionAdmin)

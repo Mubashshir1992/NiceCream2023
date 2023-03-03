@@ -1,0 +1,21 @@
+
+{% extends 'base.html' %}
+{% block content %} <br>
+<div class="container">
+
+<center>
+    <h1>Pul chiqimi Client</h1>
+{% if user.is_superuser %}
+{% if submitted %}
+<h1>Pul chiqim bo'ldi</h1>
+{% else %}
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }} <br>
+    <input type="submit" value="Saqlash" class="btn btn-outline-success"> 
+</form>
+{% endif %}
+{% endif %}
+</center>
+</div>
+{% endblock content %}

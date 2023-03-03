@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Cash, InCash, InCashClient, OutCash, Expense
+from .models import Cash, InCash, InCashClient, OutCash, OutCashClient, Expense
 
 
 class CashForm(ModelForm):
@@ -80,6 +80,26 @@ class OutCashForm(ModelForm):
             'summa': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Summa'}),
             'comment': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Izoh'}),
         }
+
+class OutCashClientForm(ModelForm):
+    class Meta:
+        model = OutCashClient
+        fields = ('out_date', 'client', 'ssumma', 'comment')
+
+        labels = {
+            'out_date': 'YYYY-MM-DD HH:MM:SS',
+            'client': 'Client',
+            'ssumma' : '',
+            'comment' : '',
+            }
+        
+        widgets = {
+            'out_date': forms.TextInput(attrs={'type' : 'datetime-local','class':'form-control', 'placeholder':'Sana'}),
+            'client': forms.Select(attrs={'class':'form-control', 'placeholder':'Provider'}),
+            'ssumma': forms.TextInput(attrs={'class':'form-control', 'placeholder':'SSumma'}),
+            'comment': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Izoh'}),
+        }
+
 
 class ExpenseForm(ModelForm):
     class Meta:

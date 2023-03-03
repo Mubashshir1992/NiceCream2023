@@ -150,6 +150,46 @@ def delete_trans_outCash(sender, instance, **kwargs):
     trans.delete()
 
 
+@receiver(post_save, sender=OutCashClient)
+def creat_trans_outCash(sender, instance, created, **kwargs):
+    if created:
+        Transaction.objects.create(
+            trans_date=instance.out_date,
+            comment = instance.comment,
+            client = instance.client,
+            ssumma = -instance.ssumma,
+            event_id = instance.event_id
+        )
+        client = User.objects.filter(user_type = 'CL').get(username=instance.client)
+        client.balance -= instance.ssumma
+        client.save()
+
+    else:
+        tr = Transaction.objects.get(event_id=instance.event_id)
+        tr.trans_date=instance.out_date
+        tr.comment = instance.comment
+        tr.client = instance.client
+        tr.ssumma = -instance.ssumma
+        tr.event_id = instance.event_id
+        tr.save()
+
+        client = User.objects.filter(user_type = 'CL').get(username=instance.client)
+        client.balance -= instance.ssumma
+        client.save()
+
+
+@receiver(post_delete, sender=OutCashClient)
+def delete_trans_outCash(sender, instance, **kwargs):
+
+    client = User.objects.filter(user_type = 'CL').get(username=instance.client)
+    client.balance += instance.ssumma
+    client.save()
+
+    trans = Transaction.objects.get(event_id=instance.event_id)
+    trans.delete()
+
+
+
 @receiver(post_save, sender=Expense)
 def creat_trans_expense(sender, instance, created, **kwargs):
     if created:

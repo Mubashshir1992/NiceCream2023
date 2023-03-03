@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from .models import Cash, InCash, InCashClient, OutCash, Expense, Transaction
+from .models import Cash, InCash, InCashClient, OutCash, Expense, Transaction, OutCashClient
 from django.http import HttpResponseRedirect
-from .forms import CashForm, InCashForm, InCashClientForm, OutCashForm, ExpenseForm
+from .forms import CashForm, InCashForm, InCashClientForm, OutCashForm, ExpenseForm, OutCashClientForm
 from apps.accounts.models import User
 
 # Create your views here.
@@ -193,6 +193,50 @@ def delete_out_cash(request, id):
     cash = OutCash.objects.get(pk=id)
     cash.delete()
     return redirect('out_cash_list')
+
+
+# Pul chiqimi Client
+def out_cashClient_list(request):
+    out_cashClient_list = OutCashClient.objects.all().order_by('-out_date')
+    return render(request, 'cashes/out_cashClient_list.html', {
+        'out_cashClient_list' : out_cashClient_list,
+    })
+
+def add_out_cashClient(request):
+    submitted = False
+    if request.method == "POST":
+        form = OutCashClientForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('out_cashClient_list')
+    else:
+        form = OutCashClientForm()
+        if 'submitted' in request.GET:
+            submitted = True
+
+    context = {
+        'form': form,
+        'submitted': submitted,
+    }
+
+    return render(request, 'cashes/add_out_cashClient.html',context )
+
+def update_out_cashClient(request, id):
+    cash = OutCashClient.objects.get(pk=id)
+    form = OutCashClientForm(request.POST or None, request.FILES or None, instance=cash)
+    if form.is_valid():
+
+        form.save()
+        return redirect('out_cashClient_list')
+    return render(request, 'cashes/update_out_cashClient.html', {
+       'form': form,
+       'cash': cash,
+    })
+
+def delete_out_cashClient(request, id):
+    cash = OutCashClient.objects.get(pk=id)
+    cash.delete()
+    return redirect('out_cashClient_list')
 
 
 # Xarajat

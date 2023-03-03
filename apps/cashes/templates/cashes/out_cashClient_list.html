@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+<br>
+<h1>Pul Chiqimi   <a href="{% url 'add_out_cashClient' %}" class="btn btn-outline-success btn-sm mx-1">Add new</a></h1><br>
+
+<table class="table table-striped table-hover table-bordered">
+    <thead class="table-info">
+      <tr>
+        <th scope="col">№</th>
+        <th scope="col">Sana</th>
+        <th scope="col">Client</th>
+        <th scope="col">SSumma</th>
+        <th scope="col">Izoh</th>
+        <th scope="col">Sozlamalar</th>
+        
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for cash in out_cashClient_list %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ cash.out_date|date:'d-m-Y H:i:s' }}</td>
+        <td>{{ cash.client }}</td>
+        <td>{{ cash.ssumma}}</td>
+        <td>{{ cash.comment }}</td>
+        {% if user.is_superuser %}
+        <td align="right">
+          <a href="{% url 'update_out_cashClient' cash.id %}" class="btn btn-outline-secondary btn-sm mx-1">Update</a>
+          <a href="{% url 'delete_out_cashClient' cash.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+        </td>
+            {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock content %}

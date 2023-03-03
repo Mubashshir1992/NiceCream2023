@@ -59,6 +59,21 @@ class OutCash(models.Model):
     def __str__(self):
         return self.trader
 
+#Pul chiqimi Client
+class OutCashClient(models.Model):
+    event_id = models.UUIDField(default=uuid.uuid4, blank=True, null=True)
+    out_date = models.DateTimeField('Sana',)
+    client = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="client_payee", limit_choices_to ={'user_type':'CL'})
+    ssumma = models.IntegerField(null=True,)
+    comment = models.TextField(blank=True, null=True, default='Pul chiqimi Client',)
+
+    class Meta:
+        ordering = ['-out_date']
+
+    def __str__(self):
+        return self.client
+
+
 #Xarajat
 class Expense(models.Model):
     event_id = models.UUIDField(default=uuid.uuid4, blank=True, null=True)
