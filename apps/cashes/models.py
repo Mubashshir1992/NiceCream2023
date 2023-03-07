@@ -13,6 +13,20 @@ class Cash(models.Model):
     def __str__(self):
         return self.name
 
+#Kassa qoldig'i
+class CashBalance(models.Model):
+    event_id = models.UUIDField(default=uuid.uuid4, blank=True, null=True)
+    in_date = models.DateTimeField('Sana',)
+    cash = models.ForeignKey(Cash, blank=True, null=True, on_delete= models.CASCADE)
+    summa = models.IntegerField(null=True,)
+    comment = models.TextField(blank=True, null=True, default="Kassa qoldig'i",)
+
+    class Meta:
+        ordering = ['-in_date']
+
+    def __str__(self):
+        return self.cash.name
+
 
 #Pul kirimi
 class InCash(models.Model):

@@ -52,19 +52,20 @@
                     </thead>
                     <tbody id="mytable" class="table-group-divider">
                       <tr>
-                        <th scope="row">1</th>
+                        <th scope="row" onclick="AddRow()" >+</th>
                         <td>{{ tovar }}</td>
-                        <td><input type="number"></td>
-                        <td id="soni" onchange="quantityfunc()">{{ soni }}</td>
-                        <td id="tannarxi" onchange="quantityfunc()">{{ tannarxi }}</td>
-                        <td id="tansum" class="tansumma" onchange="quantityfunc()">{{ tansumma }}</td>
-                        <td id="narxi" onchange="quantityfunc()">{{ narxi }}</td>
-                        <td id="sum" class="summa" onchange="quantityfunc()">{{ summa }}</td>
-                        <td id="snarxi" onchange="quantityfunc()">{{ snarxi }}</td>
-                        <td id="ssum" class="ssumma" onchange="quantityfunc()">{{ ssumma }}</td>
+                        <td></td>
+                        <td class="soni" onchange="quantityfunc()">{{ soni }}</td>
+                        <td class="tannarxi" onchange="quantityfunc()">{{ tannarxi }}</td>
+                        <td class="tansumma" onchange="quantityfunc()">{{ tansumma }}</td>
+                        <td class="narxi" onchange="quantityfunc()">{{ narxi }}</td>
+                        <td class="summa" onchange="quantityfunc()">{{ summa }}</td>
+                        <td class="snarxi" onchange="quantityfunc()">{{ snarxi }}</td>
+                        <td class="ssumma" onchange="quantityfunc()">{{ ssumma }}</td>
                       </tr>
+                    </tbody>
+                    <tbody class="table-group-divider">
                       <tr class="table-dark border-primary fs-5 fw-bold">
-                        
                         <td colspan="2">Total</td>
                         <td></td>
                         <td></td>
@@ -93,47 +94,56 @@
 
 <script>
     
-  var total_sum = document.getElementById('total_sum');
-  var summa = document.getElementsByClassName('summa');
-  var total_tansum = document.getElementById('total_tansum');
-  var tansumma = document.getElementsByClassName('tansumma');
-  var total_ssum = document.getElementById('total_ssum');
-  var ssumma = document.getElementsByClassName('ssumma');
+let total_sum = document.getElementById('total_sum');
+let total_tansum = document.getElementById('total_tansum');
+let total_ssum = document.getElementById('total_ssum');
 
-  var soni = document.getElementById('soni');
-  var tannarxi = document.getElementById('tannarxi');
-  var tansum = document.getElementById('tansum');
-  var narxi = document.getElementById('narxi');
-  var sum = document.getElementById('sum');
-  var snarxi = document.getElementById('snarxi');
-  var ssum = document.getElementById('ssum');
+let soni = document.getElementsByClassName('soni');
+let tannarxi = document.getElementsByClassName('tannarxi');
+let tansumma = document.getElementsByClassName('tansumma');
+let narxi = document.getElementsByClassName('narxi');
+let summa = document.getElementsByClassName('summa');
+let snarxi = document.getElementsByClassName('snarxi');
+let ssumma = document.getElementsByClassName('ssumma');
+
+let mytable = document.getElementById('mytable');
 
   function totalResult(element_id, element_class){
-      var cal = 0;
+    let cal = 0;
       for(let i=0; i<element_class.length; i++){
         cal +=  parseFloat(element_class[i].children[0].value);
       }
       element_id.innerHTML = cal;
       
   }
-
- 
-
   function quantityfunc(){
-      tansum.children[0].value = parseInt(tannarxi.children[0].value)*parseInt(soni.children[0].value);
-      sum.children[0].value = parseInt(narxi.children[0].value)*parseInt(soni.children[0].value);
-      ssum.children[0].value = parseInt(snarxi.children[0].value)*parseInt(soni.children[0].value);
+      tansumma.children[0].value = parseInt(tannarxi.children[0].value)*parseInt(soni.children[0].value);
+      summa.children[0].value = parseInt(narxi.children[0].value)*parseInt(soni.children[0].value);
+      ssumma.children[0].value = parseInt(snarxi.children[0].value)*parseInt(soni.children[0].value);
       totalResult(total_sum, summa);
       totalResult(total_tansum, tansumma);
       totalResult(total_ssum, ssumma);
     }
   function summafunc(){
-      tannarxi.children[0].value = parseInt(tansum.children[0].value)/parseInt(soni.children[0].value);
-      narxi.children[0].value = parseInt(sum.children[0].value)/parseInt(soni.children[0].value);
-      snarxi.children[0].value = parseInt(ssum.children[0].value)/parseInt(soni.children[0].value);
+      tannarxi.children[0].value = parseInt(tansumma.children[0].value)/parseInt(soni.children[0].value);
+      narxi.children[0].value = parseInt(summa.children[0].value)/parseInt(soni.children[0].value);
+      snarxi.children[0].value = parseInt(ssumma.children[0].value)/parseInt(soni.children[0].value);
+  }
+  function AddRow(){
+    mytable.innerHTML += `<tr>
+                        <th scope="row" onclick="AddRow()" >+</th>
+                        <td>{{ tovar }}</td>
+                        <td></td>
+                        <td class="soni" onchange="quantityfunc()">{{ soni }}</td>
+                        <td class="tannarxi" onchange="quantityfunc()">{{ tannarxi }}</td>
+                        <td class="tansumma" onchange="quantityfunc()">{{ tansumma }}</td>
+                        <td class="narxi" onchange="quantityfunc()">{{ narxi }}</td>
+                        <td class="summa" onchange="quantityfunc()">{{ summa }}</td>
+                        <td class="snarxi" onchange="quantityfunc()">{{ snarxi }}</td>
+                        <td class="ssumma" onchange="quantityfunc()">{{ ssumma }}</td>
+                      </tr>`
   }
 
-  
 </script>
 
 {% endblock content %}

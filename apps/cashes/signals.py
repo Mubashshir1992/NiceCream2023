@@ -228,3 +228,42 @@ def delete_trans_expense(sender, instance, **kwargs):
 
     trans = Transaction.objects.get(event_id=instance.event_id)
     trans.delete()
+
+
+@receiver(post_save, sender=CashBalance)
+def creat_trans_inCash(sender, instance, created, **kwargs):
+    if created:
+        Transaction.objects.create(
+            trans_date=instance.in_date,
+            comment = instance.comment,
+            cash = instance.cash,
+            cash_summa = instance.summa,
+            event_id = instance.event_id
+        )
+        cash = Cash.objects.get(name=instance.cash)
+        cash.balance += instance.summa
+        cash.save()
+    else:
+        tr = Transaction.objects.get(event_id=instance.event_id)
+        tr.trans_date=instance.in_date
+        tr.comment = instance.comment
+        tr.cash = instance.cash
+        tr.cash_summa = instance.summa
+        tr.event_id = instance.event_id
+        tr.save()
+
+        cash = Cash.objects.get(name=instance.cash)
+        cash.balance += instance.summa
+        cash.save()
+
+
+@receiver(post_delete, sender=InCash)
+def delete_trans_inCash(sender, instance, **kwargs):
+
+    cash = Cash.objects.get(name=instance.cash)
+    cash.balance -= instance.summa
+    cash.save()
+
+    trans = Transaction.objects.get(event_id=instance.event_id)
+    trans.delete()
+

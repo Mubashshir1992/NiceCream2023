@@ -1,9 +1,13 @@
 from django.contrib import admin
-from .models import Cash, InCash, InCashClient, Expense, Transaction, OutCash, OutCashClient
+from .models import Cash, InCash, InCashClient, Expense, Transaction, OutCash, OutCashClient, CashBalance
 
 class InCashAdmin(admin.ModelAdmin):
     model = InCash
     list_display = ['cash', 'in_date', 'trader', 'summa', 'comment',]
+
+class CashBalanceAdmin(admin.ModelAdmin):
+    model = CashBalance
+    list_display = ['cash', 'in_date', 'summa', 'comment',]
 
 class InCashClientAdmin(admin.ModelAdmin):
     model = InCashClient
@@ -28,6 +32,7 @@ class TransactionAdmin(admin.ModelAdmin):
 # Register your models here.
 admin.site.register(Cash)
 admin.site.register(InCash, InCashAdmin)
+admin.site.register(CashBalance, CashBalanceAdmin)
 admin.site.register(OutCash, OutCashAdmin)
 admin.site.register(OutCashClient, OutCashClientAdmin)
 admin.site.register(InCashClient, InCashClientAdmin)

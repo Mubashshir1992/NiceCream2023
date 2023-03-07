@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Cash, InCash, InCashClient, OutCash, OutCashClient, Expense
+from .models import Cash, InCash, InCashClient, OutCash, OutCashClient, Expense, CashBalance
 
 
 class CashForm(ModelForm):
@@ -115,6 +115,26 @@ class ExpenseForm(ModelForm):
         
         widgets = {
             'date': forms.TextInput(attrs={'type' : 'datetime-local','class':'form-control', 'placeholder':'Sana'}),
+            'cash': forms.Select(attrs={'class':'form-control', 'placeholder':'Cassa'}),
+            'summa': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Summa'}),
+            'comment': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Izoh'}),
+        }
+
+
+class CashBalanceForm(ModelForm):
+    class Meta:
+        model = CashBalance
+        fields = ('in_date', 'cash', 'summa', 'comment')
+
+        labels = {
+            'in_date': 'YYYY-MM-DD HH:MM:SS',
+            'cash' : 'Cassa',
+            'summa' : '',
+            'comment' : '',
+            }
+        
+        widgets = {
+            'in_date': forms.TextInput(attrs={'type' : 'datetime-local','class':'form-control', 'placeholder':'Sana'}),
             'cash': forms.Select(attrs={'class':'form-control', 'placeholder':'Cassa'}),
             'summa': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Summa'}),
             'comment': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Izoh'}),
