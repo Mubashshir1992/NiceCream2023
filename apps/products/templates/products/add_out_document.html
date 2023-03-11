@@ -1,0 +1,24 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+<center>
+    {% if user.is_superuser %}
+<br>  <h1>Document qo'shish</h1><br>
+{% if submitted %}
+<h1>Document qo'shildi</h1>
+{% else %}
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" class="btn btn-secondary">
+</form>
+{% endif %}
+{% else %} 
+<h1>Kechirasiz sizning bunday huquqingiz yo'q!</h1>
+
+{% endif %}
+</center>
+</div>
+{% endblock content %}

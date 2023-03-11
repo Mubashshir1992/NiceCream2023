@@ -44,13 +44,62 @@ class WarehouseName(models.Model):
     def __str__(self):
         return self.name
 
-
-#Tovar kirim qilish
-class InProduct(models.Model):
+#InDocument
+class InDocument(models.Model):
     event_id = models.UUIDField(default=uuid.uuid4, blank=True, null=True,)
     in_date = models.DateTimeField('Sana',)
     provider = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="buy_provider", limit_choices_to ={'user_type':'PR'})
     warehouse = models.ForeignKey(WarehouseName, blank=True, null=True, on_delete= models.CASCADE)
+    summa = models.IntegerField('Summa',  blank=True, null=True,default=0)
+    comment = models.TextField(blank=True, null=True, default='Tovar kirimi',)
+
+    class Meta:
+        ordering = ['-in_date']
+
+    def __str__(self):
+        return f'{self.provider} {self.in_date}'
+
+
+#OutDocument
+class OutDocument(models.Model):
+    event_id = models.UUIDField(default=uuid.uuid4, blank=True, null=True,)
+    out_date = models.DateTimeField('Sana',)
+    trader = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="buyer", limit_choices_to ={'user_type':'PR'})
+    warehouse = models.ForeignKey(WarehouseName, blank=True, null=True, on_delete= models.CASCADE)
+    summa = models.IntegerField('Summa',  blank=True, null=True,default=0)
+    profit = models.IntegerField('Foyda', blank=True, null=True,default=0)
+    comment = models.TextField(blank=True, null=True, default='Tovar chiqimi',)
+
+    class Meta:
+        ordering = ['-out_date']
+
+    def __str__(self):
+        return f'{self.trader} {self.out_date}'
+
+#OutDocumentClient
+class OutDocumentClient(models.Model):
+    event_id = models.UUIDField(default=uuid.uuid4, blank=True, null=True,)
+    out_date = models.DateTimeField('Sana',)
+    trader = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="buyer_seller", limit_choices_to ={'user_type':'PR'})
+    client = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="shopkeeper", limit_choices_to ={'user_type':'CL'})
+    warehouse = models.ForeignKey(WarehouseName, blank=True, null=True, on_delete= models.CASCADE)
+    summa = models.IntegerField('Summa',  blank=True, null=True,default=0)
+    ssumma = models.IntegerField('SSumma',  blank=True, null=True,default=0)
+    profit = models.IntegerField('Foyda', blank=True, null=True,default=0)
+    sprofit = models.IntegerField('Sfoyda', blank=True, null=True,default=0)
+    comment = models.TextField(blank=True, null=True, default='Tovar chiqimi B',)
+
+    class Meta:
+        ordering = ['-out_date']
+
+    def __str__(self):
+        return f'{self.client} {self.out_date}'
+
+
+#Tovar kirim qilish
+class InProduct(models.Model):
+    event_id = models.UUIDField(default=uuid.uuid4, blank=True, null=True,)
+    document = models.ForeignKey(InDocument, blank=True, null=True, on_delete= models.CASCADE)
     product = models.ForeignKey(Product, blank=True, null=True, on_delete= models.CASCADE)
     quantity = models.IntegerField('Soni', )
     body_price = models.IntegerField('Tannarxi',  )
@@ -59,21 +108,15 @@ class InProduct(models.Model):
     summa = models.IntegerField('Summa',  )
     shop_price = models.IntegerField('Snarxi',  )
     shop_summa = models.IntegerField('Ssumma', )
-    comment = models.TextField(blank=True, null=True, default='Tovar kirimi',)
-
-    class Meta:
-        ordering = ['-in_date']
 
     def __str__(self):
-        return self.provider.username
+        return self.document.provider.username
 
 
 #Tovar chiqim qilish
 class OutProduct(models.Model):
     event_id = models.UUIDField(default=uuid.uuid4, blank=True, null=True,)
-    out_date = models.DateTimeField('Sana',)
-    trader = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="buyer", limit_choices_to ={'user_type':'PR'})
-    warehouse = models.ForeignKey(WarehouseName, blank=True, null=True, on_delete= models.CASCADE)
+    document = models.ForeignKey(OutDocument, blank=True, null=True, on_delete= models.CASCADE)
     product = models.ForeignKey(Product, blank=True, null=True, on_delete= models.CASCADE)
     quantity = models.IntegerField('Soni',  )
     body_price = models.IntegerField('Tannarxi',  )
@@ -81,22 +124,15 @@ class OutProduct(models.Model):
     price = models.IntegerField('Narxi',  )
     summa = models.IntegerField('Summa',  )
     profit = models.IntegerField('Foyda', )
-    comment = models.TextField(blank=True, null=True, default='Tovar chiqimi',)
-
-    class Meta:
-        ordering = ['-out_date']
 
     def __str__(self):
-        return self.trader.username
+        return self.document.trader.username
 
 
 # B Tovar chiqim qilish
 class OutProductB(models.Model):
     event_id = models.UUIDField(default=uuid.uuid4,  blank=True, null=True)
-    out_date = models.DateTimeField('Sana',)
-    trader = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="buyer_seller", limit_choices_to ={'user_type':'PR'})
-    client = models.ForeignKey(User, blank=True, null=True, on_delete= models.CASCADE, related_name="shopkeeper", limit_choices_to ={'user_type':'CL'})
-    warehouse = models.ForeignKey(WarehouseName, blank=True, null=True, on_delete= models.CASCADE)
+    document = models.ForeignKey(OutDocumentClient, blank=True, null=True, on_delete= models.CASCADE)
     product = models.ForeignKey(Product, blank=True, null=True, on_delete= models.CASCADE)
     quantity = models.IntegerField('Soni',  )
     body_price = models.IntegerField('Tannarxi',  )
@@ -107,13 +143,9 @@ class OutProductB(models.Model):
     shop_summa = models.IntegerField('Ssumma', )
     profit = models.IntegerField('Foyda', )
     sprofit = models.IntegerField('Sfoyda', )
-    comment = models.TextField(blank=True, null=True, default='Tovar chiqimi B',)
-
-    class Meta:
-        ordering = ['-out_date']
 
     def __str__(self):
-        return self.client.username
+        return self.document.client.username
 
 
 #Omborlar 

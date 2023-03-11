@@ -11,31 +11,13 @@
 <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <h1>Tovar chiqim qilish <input type="submit" value="Saqlash" class="btn btn-outline-success"> </h1> <br><br>      
-    
-        <div class="row">
-            <div class="col-3">
-                <h5>Sana:</h5>
-                {{ sana }}
-            </div>
-            <div class="col-3">
-                <h5>Omborni tanlang:</h5>
-                {{ ombor }}
-            </div>
-            <div class="col-3">
-                <h5>Kontragent:</h5>
-                {{ trader }}
-            </div>
-            <div class="col-3">
-                <h5>Izoh:</h5>
-                {{ izoh }} <br>
-            </div>
-        </div>
         <div class="row">
             <div class="col">
                 <table class="table table-striped table-hover table-bordered">
                     <thead class="table-info fs-5 fw-bold">
                       <tr>
                         <th scope="col">№</th>
+                        <th scope="col">Document</th>
                         <th scope="col">Tovar nomi</th>
                         <th scope="col">Box</th>
                         <th scope="col">Soni</th>
@@ -49,6 +31,7 @@
                     <tbody id="mytable" class="table-group-divider">
                       <tr>
                         <th scope="row">1</th>
+                        <td>{{ document }}</td>
                         <td>{{ tovar }}</td>
                         <td><input type="number"></td>
                         <td id="soni" onchange="quantityfunc()">{{ soni }}</td>
@@ -61,6 +44,7 @@
                       <tr class="table-dark border-primary fs-5 fw-bold">
                         
                         <td colspan="2">Total</td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

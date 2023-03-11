@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+<br>
+<h1> OutDocumentlar  <a href="{% url 'add_out_document' %}" class="btn btn-outline-success btn-sm mx-1">Add new</a></h1> <br>
+
+<table class="table table-striped table-hover table-bordered">
+    <thead class="table-info">
+      <tr>
+        <th scope="col">№</th>
+        <th scope="col">Sana</th>
+        <th scope="col">Provider</th>
+        <th scope="col">Ombor</th>
+        <th scope="col">Summa</th>
+        <th scope="col">Izoh</th>
+        <th scope="col">Sozlamalar</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for document in document_list %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td><a href="{% url 'out_document_products' document.id %}">{{ document.out_date }}</a></td>
+        <td>{{ document.trader }}</td>
+        <td>{{ document.warehouse }}</td>
+        <td>{{ document.summa }}</td>
+        <td>{{ document.comment}}</td>
+        {% if user.is_superuser %}
+        <td align="right">
+          <a href="{% url 'update_out_document' document.id %}" class="btn btn-outline-secondary btn-sm mx-1">Update</a>
+          <a href="{% url 'delete_out_document' document.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+        </td>
+            {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock content %}

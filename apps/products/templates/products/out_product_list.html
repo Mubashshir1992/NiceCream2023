@@ -9,11 +9,11 @@
     <thead class="table-info">
       <tr>
         <th scope="col">№</th>
-        <th scope="col">Sana</th>
-        <th scope="col">Ombor</th>
-        <th scope="col">Trader</th>
+        <th scope="col">Document</th>
+        <th scope="col">Tovar nomi</th>
+        <th scope="col">Soni</th>
+        <th scope="col">Narxi</th>
         <th scope="col">Summa</th>
-        <th scope="col">Izoh</th>
         <th scope="col">Sozlamalar</th>
         
       </tr>
@@ -22,11 +22,11 @@
       {% for product in out_product_list %}
       <tr>
         <th scope="row">{{ forloop.counter }}</th>
-        <td>{{ product.out_date|date:'d-m-Y H:i:s' }} </td>
-        <td>{{ product.warehouse }}</td>
-        <td>{{ product.trader }}</td>
+        <td>{{ product.document }} </td>
+        <td>{{ product.product }}</td>
+        <td>{{ product.quantity }}</td>
+        <td>{{ product.price }}</td>
         <td>{{ product.summa }}</td>
-        <td>{{ product.comment }}</td>
         {% if user.is_superuser %}
         <td align="right">
           <a href="{% url 'update_out_product' product.id %}" class="btn btn-outline-secondary btn-sm mx-1">Update</a>

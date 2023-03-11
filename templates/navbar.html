@@ -15,8 +15,11 @@
               <i class="far fa-cart-arrow-down"></i>  Marketing
           </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownButton">
+              <li><a class="dropdown-item" href="{% url 'in_document_list' %}">InDocument</a></li>
               <li><a class="dropdown-item" href="{% url 'in_product_list' %}">InProduct</a></li>
+              <li><a class="dropdown-item" href="{% url 'out_document_list' %}">OutDocument</a></li>
               <li><a class="dropdown-item" href="{% url 'out_product_list' %}">OutProduct</a></li>
+              <li><a class="dropdown-item" href="{% url 'out_documentclient_list' %}">OutDocumentClient</a></li>
               <li><a class="dropdown-item" href="{% url 'out_productb_list' %}">OutProductB</a></li>
               <li><a class="dropdown-item" href="{% url 'in_cash_list' %}">InCash</a></li>
               <li><a class="dropdown-item" href="{% url 'in_cashclient_list' %}">InCashClient</a></li>

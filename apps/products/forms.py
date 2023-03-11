@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.widgets import NumberInput
 from django.forms import ModelForm
-from .models import Product, InProduct, OutProduct, OutProductB, WarehouseName
+from .models import Product, InProduct, OutProduct, OutProductB, WarehouseName, InDocument, OutDocument, OutDocumentClient
 
 
 class ProductForm(ModelForm):
@@ -38,12 +38,10 @@ class ProductForm(ModelForm):
 class InProductForm(ModelForm):
     class Meta:
         model = InProduct
-        fields = ('in_date', 'warehouse', 'provider', 'product', 'quantity', 'body_price', 'body_summa', 'price', 'summa', 'shop_price', 'shop_summa', 'comment')
+        fields = ('document', 'product', 'quantity', 'body_price', 'body_summa', 'price', 'summa', 'shop_price', 'shop_summa')
 
         labels = {
-            'in_date': 'YYYY-MM-DD HH:MM:SS',
-            'warehouse': 'Ombor',
-            'provider': 'Provider',
+            'document' : '',
             'product' : '',
             'quantity' : '',
             'body_price' : '',
@@ -52,13 +50,10 @@ class InProductForm(ModelForm):
             'summa' : '',
             'shop_price' : '',
             'shop_summa' : '',
-            'comment' : '',
             }
         
         widgets = {
-            'in_date': forms.TextInput(attrs={'type' : 'datetime-local','class':'form-control', 'placeholder':'Sana'}),
-            'warehouse': forms.Select(attrs={'class':'form-control', 'placeholder':'Ombor'}),
-            'provider': forms.Select(attrs={'class':'form-control', 'placeholder':'Provider'}),
+            'document': forms.Select(attrs={'class':'form-control', 'placeholder':'Document nomi'}),
             'product': forms.Select(attrs={'class':'form-control', 'placeholder':'Mahsulot nomi'}),
             'quantity': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Soni'}),
             'body_price': forms.TextInput(attrs={'class':'form-control', 'placeholder':'TanNarxi'}),
@@ -67,7 +62,6 @@ class InProductForm(ModelForm):
             'summa': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Summa'}),
             'shop_price': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Snarxi'}),
             'shop_summa': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Ssumma'}),
-            'comment': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Izoh'}),
         }
 
 
@@ -75,12 +69,10 @@ class OutProductForm(ModelForm):
 
     class Meta:
         model = OutProduct
-        fields = ('out_date', 'warehouse', 'trader', 'product', 'quantity', 'body_price', 'body_summa', 'price', 'summa', 'profit', 'comment')
+        fields = ('document', 'product', 'quantity', 'body_price', 'body_summa', 'price', 'summa', 'profit',)
 
         labels = {
-            'out_date': 'YYYY-MM-DD HH:MM:SS',
-            'warehouse': 'Ombor',
-            'trader': '',
+            'document' : '',
             'product' : '',
             'quantity' : '',
             'body_price' : '',
@@ -88,13 +80,10 @@ class OutProductForm(ModelForm):
             'price' : '',
             'summa' : '',
             'profit' : '',
-            'comment' : '',
             }
         
         widgets = {
-            'out_date': forms.TextInput(attrs={'type' : 'datetime-local','class':'form-control', 'placeholder':'Sana'}),
-            'warehouse': forms.Select(attrs={'class':'form-control', 'placeholder':'Ombor'}),
-            'trader': forms.Select(attrs={'class':'form-control', 'placeholder':'Trader'}),
+            'document': forms.Select(attrs={'class':'form-control', 'placeholder':'Document nomi'}),
             'product': forms.Select(attrs={'class':'form-control', 'placeholder':'Mahsulot nomi'}),
             'quantity': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Soni'}),
             'body_price': forms.TextInput(attrs={'class':'form-control', 'placeholder':'TanNarxi'}),
@@ -102,7 +91,6 @@ class OutProductForm(ModelForm):
             'price': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Narxi'}),
             'summa': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Summa'}),
             'profit': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Foyda'}),
-            'comment': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Izoh'}),
         }
 
 
@@ -110,13 +98,10 @@ class OutProductBForm(ModelForm):
 
     class Meta:
         model = OutProductB
-        fields = ('out_date', 'warehouse', 'trader', 'client', 'product', 'quantity', 'body_price', 'body_summa', 'price', 'summa', 'shop_price', 'shop_summa', 'profit', 'sprofit', 'comment')
+        fields = ('document', 'product', 'quantity', 'body_price', 'body_summa', 'price', 'summa', 'shop_price', 'shop_summa', 'profit', 'sprofit')
 
         labels = {
-            'out_date': 'YYYY-MM-DD HH:MM:SS',
-            'warehouse': 'Ombor',
-            'trader': '',
-            'client': '',
+            'document' : '',
             'product' : '',
             'quantity' : '',
             'body_price' : '',
@@ -127,14 +112,10 @@ class OutProductBForm(ModelForm):
             'shop_summa' : '',
             'profit' : '',
             'sprofit' : '',
-            'comment' : '',
             }
         
         widgets = {
-            'out_date': forms.TextInput(attrs={'type' : 'datetime-local','class':'form-control', 'placeholder':'Sana'}),
-            'warehouse': forms.Select(attrs={'class':'form-control', 'placeholder':'Ombor'}),
-            'trader': forms.Select(attrs={'class':'form-control', 'placeholder':'Trader'}),
-            'client': forms.Select(attrs={'class':'form-control', 'placeholder':'Client'}),
+            'document': forms.Select(attrs={'class':'form-control', 'placeholder':'Document nomi'}),
             'product': forms.Select(attrs={'class':'form-control', 'placeholder':'Mahsulot nomi'}),
             'quantity': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Soni'}),
             'body_price': forms.TextInput(attrs={'class':'form-control', 'placeholder':'TanNarxi'}),
@@ -145,7 +126,6 @@ class OutProductBForm(ModelForm):
             'shop_summa': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Ssumma'}),
             'profit': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Foyda'}),
             'sprofit': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Sfoyda'}),
-            'comment': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Izoh'}),
         }
 
 
@@ -162,5 +142,64 @@ class WarehouseNameForm(ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Ombor nomi'}),
             'warehouse_size': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Ombor hajmi'}),
+        }
+
+class InDocumentForm(ModelForm):
+    class Meta:
+        model = InDocument
+        fields = ('in_date', 'warehouse', 'provider', 'comment')
+
+        labels = {
+            'in_date': 'YYYY-MM-DD HH:MM:SS',
+            'warehouse': 'Ombor',
+            'provider': 'Provider',
+            'comment' : '',
+            }
+        
+        widgets = {
+            'in_date': forms.TextInput(attrs={'type' : 'datetime-local','class':'form-control', 'placeholder':'Sana'}),
+            'warehouse': forms.Select(attrs={'class':'form-control', 'placeholder':'Ombor'}),
+            'provider': forms.Select(attrs={'class':'form-control', 'placeholder':'Provider'}),
+            'comment': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Izoh'}),
+        }
+
+class OutDocumentForm(ModelForm):
+    class Meta:
+        model = OutDocument
+        fields = ('out_date', 'warehouse', 'trader', 'comment')
+
+        labels = {
+            'out_date': 'YYYY-MM-DD HH:MM:SS',
+            'warehouse': 'Ombor',
+            'trader': 'Trader',
+            'comment' : '',
+            }
+        
+        widgets = {
+            'out_date': forms.TextInput(attrs={'type' : 'datetime-local','class':'form-control', 'placeholder':'Sana'}),
+            'warehouse': forms.Select(attrs={'class':'form-control', 'placeholder':'Ombor'}),
+            'trader': forms.Select(attrs={'class':'form-control', 'placeholder':'Trader'}),
+            'comment': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Izoh'}),
+        }
+
+class OutDocumentClientForm(ModelForm):
+    class Meta:
+        model = OutDocumentClient
+        fields = ('out_date', 'warehouse', 'trader', 'client', 'comment')
+
+        labels = {
+            'out_date': 'YYYY-MM-DD HH:MM:SS',
+            'warehouse': 'Ombor',
+            'trader': 'Trader',
+            'client': 'Client',
+            'comment' : '',
+            }
+        
+        widgets = {
+            'out_date': forms.TextInput(attrs={'type' : 'datetime-local','class':'form-control', 'placeholder':'Sana'}),
+            'warehouse': forms.Select(attrs={'class':'form-control', 'placeholder':'Ombor'}),
+            'trader': forms.Select(attrs={'class':'form-control', 'placeholder':'Trader'}),
+            'client': forms.Select(attrs={'class':'form-control', 'placeholder':'Client'}),
+            'comment': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Izoh'}),
         }
 

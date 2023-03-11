@@ -5,6 +5,7 @@ from django.contrib import messages
 from .forms import CustomUserCreateonForm
 from .models import User
 from apps.cashes.models import Transaction
+from apps.products.models import InDocument
 import datetime
 
 # Create your views here.
@@ -114,6 +115,10 @@ def act_sverka_client(request):
 # MY Akt sverka
 def my_act_sverka(request):
         me = request.user.id
+        document_list = InDocument.objects.all()
+        for doc in document_list:
+            document=doc
+            
         pr_id = User.objects.filter(user_type = 'PR').values_list('id', flat=True)
         cl_id = User.objects.filter(user_type = 'CL').values_list('id', flat=True)
         today = datetime.date.today()
@@ -136,5 +141,6 @@ def my_act_sverka(request):
         'todate' : todate,
         'fromdate' : fromdate,
         'qs' : qs,
+        'document' : document,
 
     })  

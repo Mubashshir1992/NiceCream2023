@@ -27,15 +27,15 @@
       {% for q in qs %}
       <tr>
         <th scope="row">{{ forloop.counter }}</th>
-        <td>{{ q.trans_date }}</td>
+        <td><a href="{% url 'in_document_products' document.id %}">{{ q.trans_date }}</a></td>
         <td>{{ q.comment }}</td>
         {% if q.summa %}
         <td class="balans">{{ q.summa }}</td>
         {% endif %}
         {% if q.ssumma %}
-        <td class="balans">{{ q.ssumma }}</td>
+        <td class="sbalans">{{ q.ssumma }}</td>
         {% endif %}
-        <td></td>
+        <td class="qoldiq"></td>
       </tr>
       {% endfor %}
       <tr class="table-dark border-primary fs-5 fw-bold">
@@ -52,10 +52,28 @@
     
     let total = document.getElementById('total');
     let balans = document.getElementsByClassName('balans');
+    let sbalans = document.getElementsByClassName('sbalans');
     let cal = 0;
     for(let i=0; i<balans.length; i++){
         cal +=  parseInt(balans[i].innerHTML);
+        if (parseInt(balans[i].textContent) < 0) {
+          balans[i].classList.add('text-danger')
+        } else if(parseInt(balans[i].textContent) == 0) {
+          balans[i].classList.add('text-warning')
+        } else {
+          balans[i].classList.add('text-primary')
+        };
     }
+    // for(let i=0; i<sbalans.length; i++){
+    //     cal +=  parseInt(sbalans[i].innerHTML);
+    //     if (parseInt(sbalans[i].textContent) < 0) {
+    //       sbalans[i].classList.add('text-danger')
+    //     } else if(parseInt(sbalans[i].textContent) == 0) {
+    //       sbalans[i].classList.add('text-warning')
+    //     } else {
+    //       sbalans[i].classList.add('text-primary')
+    //     };
+    // }
     total.innerHTML = cal;
 
     let date = new Date();
@@ -72,6 +90,20 @@
   
     document.getElementById("todate").value = tomorrow;
     document.getElementById("fromdate").value = fd;
+
+    let qoldiq = document.getElementsByClassName('qoldiq');
+    let x = 0;
+    for(let i=0; i<qoldiq.length; i++){
+      let oldqoldiq = 0;
+      x = i-1
+      if (x < 0) {
+        oldqoldiq = 0
+      } else {
+        oldqoldiq = parseInt(qoldiq[x].parentElement.children[4].textContent)
+      }
+      qoldiq[i].textContent = parseInt(qoldiq[i].parentElement.children[3].textContent) + oldqoldiq
+    }
+    
   </script>
 </div>  
 {% endblock content %}

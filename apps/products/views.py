@@ -1,17 +1,18 @@
 from django.shortcuts import render, redirect
-from .models import InProduct, Product, WarehouseName, OutProduct, OutProductB, Warehouse
-from .forms import ProductForm, InProductForm, OutProductForm, OutProductBForm, WarehouseNameForm
+from .models import InProduct, Product, WarehouseName, OutProduct, OutProductB, Warehouse, InDocument, OutDocument, OutDocumentClient
+from .forms import ProductForm, InProductForm, OutProductForm, OutProductBForm, WarehouseNameForm, InDocumentForm, OutDocumentForm, OutDocumentClientForm
 from django.http import HttpResponseRedirect
 from django.db.models import Avg, Count, Max, Min, Sum
 from apps.accounts.models import User
 from apps.cashes.models import Transaction
 from django.views import View
+from django.contrib import messages
 
 # Create your views here.
 
 # Tovar kirimi
 def in_product_list(request):
-    in_product_list = InProduct.objects.all().order_by('-in_date')
+    in_product_list = InProduct.objects.all()
     return render(request, 'products/in_product_list.html', {
         'in_product_list' : in_product_list,
     })
@@ -23,7 +24,7 @@ def add_in_product(request):
         if form.is_valid():
 
             form.save()
-            return HttpResponseRedirect('/products/add_in_product?submitted=True')
+            return redirect('in_product_list')
     else:
         form = InProductForm()
         if 'submitted' in request.GET:
@@ -32,9 +33,7 @@ def add_in_product(request):
     context = {
         'form': form,
         'submitted': submitted,
-        'sana' : form['in_date'],
-        'kontragent' : form['provider'],
-        'ombor' : form['warehouse'],
+        'document' : form['document'],
         'tovar' : form['product'],
         'soni' : form['quantity'],
         'tannarxi' : form['body_price'],
@@ -43,7 +42,6 @@ def add_in_product(request):
         'summa' : form['summa'],
         'snarxi' : form['shop_price'],
         'ssumma' : form['shop_summa'],
-        'izoh' : form['comment'],
     }
 
     return render(request, 'products/add_in_product.html',context )
@@ -68,7 +66,7 @@ def delete_in_product(request, product_id):
 
 # Tovar chiqimi
 def out_product_list(request):
-    out_product_list = OutProduct.objects.all().order_by('-out_date')
+    out_product_list = OutProduct.objects.all()
     return render(request, 'products/out_product_list.html', {
         'out_product_list' : out_product_list,
     })
@@ -94,9 +92,7 @@ def add_out_product(request):
     context = {
         'form': form,
         'submitted': submitted,
-        'sana' : form['out_date'],
-        'trader' : form['trader'],
-        'ombor' : form['warehouse'],
+        'document' : form['document'],
         'tovar' : form['product'],
         'soni' : form['quantity'],
         'tannarxi' : form['body_price'],
@@ -104,7 +100,6 @@ def add_out_product(request):
         'narxi' : form['price'],
         'summa' : form['summa'],
         'foyda' : form['profit'],
-        'izoh' : form['comment'],
     }
 
     return render(request, 'products/add_out_product.html',context )
@@ -128,7 +123,7 @@ def delete_out_product(request, product_id):
 
 # Tovar chiqimi B
 def out_productb_list(request):
-    out_product_list = OutProductB.objects.all().order_by('-out_date')
+    out_product_list = OutProductB.objects.all()
     return render(request, 'products/out_productb_list.html', {
         'out_product_list' : out_product_list,
     })
@@ -149,10 +144,7 @@ def add_out_productb(request):
     context = {
         'form': form,
         'submitted': submitted,
-        'sana' : form['out_date'],
-        'trader' : form['trader'],
-        'client' : form['client'],
-        'ombor' : form['warehouse'],
+        'document' : form['document'],
         'tovar' : form['product'],
         'soni' : form['quantity'],
         'tannarxi' : form['body_price'],
@@ -163,7 +155,6 @@ def add_out_productb(request):
         'ssumma' : form['shop_summa'],
         'foyda' : form['profit'],
         'sfoyda' : form['sprofit'],
-        'izoh' : form['comment'],
     }
 
     return render(request, 'products/add_out_productb.html',context )
@@ -347,3 +338,165 @@ def delete_product_name(request, product_id):
 #     else:
 #         return render(request, 'products/warehouse.html', {'warehouses': warehouses, 'results': data,})
 
+
+# InDocument hosil qilish
+
+def in_document_list(request):
+    document_list = InDocument.objects.all()
+    return render(request, 'products/in_document_list.html', {
+        'document_list' : document_list,
+    })
+
+def add_in_document(request):
+    submitted = False
+    if request.method == "POST":
+        form = InDocumentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('in_document_list')
+    else:
+        form = InDocumentForm()
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, 'products/add_in_document.html', {
+        'form': form,
+       'submitted': submitted
+    })
+
+def update_in_document(request, document_id):
+    document = InDocument.objects.get(pk=document_id)
+    form = InDocumentForm(request.POST or None, request.FILES or None, instance=document)
+    if form.is_valid():
+            form.save()
+            return redirect('in_document_list')
+    return render(request, 'products/update_in_document.html', {
+       'form': form,
+       'document': document,
+    })
+
+def delete_in_document(request, document_id):
+    document = InDocument.objects.get(pk=document_id)
+    document.delete()
+    return redirect('in_document_list')
+
+def in_document_products(request, document_id):
+    document = InDocument.objects.get(id=document_id)
+    products = InProduct.objects.filter(document=document).values()
+    
+
+    if products:
+        return render(request, 'products/in_document_products.html', {
+            "products" : products,
+        })
+    else:
+        messages.success(request, ("That Document Has No Products At This Time..!"))
+        return redirect('in_document_list')
+
+
+# OutDocument hosil qilish
+
+def out_document_list(request):
+    document_list = OutDocument.objects.all()
+    return render(request, 'products/out_document_list.html', {
+        'document_list' : document_list,
+    })
+
+def add_out_document(request):
+    submitted = False
+    if request.method == "POST":
+        form = OutDocumentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('out_document_list')
+    else:
+        form = OutDocumentForm()
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, 'products/add_out_document.html', {
+        'form': form,
+       'submitted': submitted
+    })
+
+def update_out_document(request, document_id):
+    document = OutDocument.objects.get(pk=document_id)
+    form = OutDocumentForm(request.POST or None, request.FILES or None, instance=document)
+    if form.is_valid():
+            form.save()
+            return redirect('out_document_list')
+    return render(request, 'products/update_out_document.html', {
+       'form': form,
+       'document': document,
+    })
+
+def delete_out_document(request, document_id):
+    document = OutDocument.objects.get(pk=document_id)
+    document.delete()
+    return redirect('out_document_list')
+
+def out_document_products(request, document_id):
+    document = OutDocument.objects.get(id=document_id)
+    products = OutProduct.objects.filter(document=document).values()
+    
+
+    if products:
+        return render(request, 'products/out_document_products.html', {
+            "products" : products,
+        })
+    else:
+        messages.success(request, ("That Document Has No Products At This Time..!"))
+        return redirect('out_document_list')
+
+
+
+# OutDocumentClient hosil qilish
+
+def out_documentclient_list(request):
+    document_list = OutDocumentClient.objects.all()
+    return render(request, 'products/out_documentclient_list.html', {
+        'document_list' : document_list,
+    })
+
+def add_out_documentclient(request):
+    submitted = False
+    if request.method == "POST":
+        form = OutDocumentClientForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('out_documentclient_list')
+    else:
+        form = OutDocumentClientForm()
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, 'products/add_out_documentclient.html', {
+        'form': form,
+       'submitted': submitted
+    })
+
+def update_out_documentclient(request, document_id):
+    document = OutDocumentClient.objects.get(pk=document_id)
+    form = OutDocumentClientForm(request.POST or None, request.FILES or None, instance=document)
+    if form.is_valid():
+            form.save()
+            return redirect('out_documentclient_list')
+    return render(request, 'products/update_out_documentclient.html', {
+       'form': form,
+       'document': document,
+    })
+
+def delete_out_documentclient(request, document_id):
+    document = OutDocumentClient.objects.get(pk=document_id)
+    document.delete()
+    return redirect('out_documentclient_list')
+
+def out_documentclient_products(request, document_id):
+    document = OutDocumentClient.objects.get(id=document_id)
+    products = OutProductB.objects.filter(document=document).values()
+    
+
+    if products:
+        return render(request, 'products/out_documentclient_products.html', {
+            "products" : products,
+        })
+    else:
+        messages.success(request, ("That Document Has No Products At This Time..!"))
+        return redirect('out_documentclient_list')

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+<br>
+<h1>Kirim tovarlar ro'yxati</h1> <br>
+
+<table class="table table-striped table-hover table-bordered">
+    <thead class="table-info">
+      <tr>
+        <th scope="col">№</th>
+        <th scope="col">Tovar Nomi</th>
+        <th scope="col">Soni</th>
+        <th scope="col">TanNarxi</th>
+        <th scope="col">TanSumma</th>
+        <th scope="col">Narxi</th>
+        <th scope="col">Summa</th>
+        <th scope="col">SNarxi</th>
+        <th scope="col">SSumma</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for product in products %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ product.product_id }}</td>
+        <td>{{ product.quantity }}</td>
+        <td>{{ product.body_price }}</td>
+        <td class="tansumma">{{ product.body_summa}}</td>
+        {% if user.is_superuser %}
+        <td>{{ product.price }}</td>
+        <td class="summa">{{ product.summa}}</td>
+        <td>{{ product.shop_price }}</td>
+        <td class="ssumma">{{ product.shop_summa}}</td> 
+        {% endif %} 
+      </tr>
+      {% endfor %}
+      <tr class="table-dark border-primary fs-5 fw-bold">
+        <td colspan="2">Total</td>
+        <td></td>
+        <td></td>
+        <td id="total_tansum"></td>
+        <td></td>
+        <td id="total_sum"></td>
+        <td></td>
+        <td id="total_ssum"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+    
+  var total_sum = document.getElementById('total_sum');
+  var summa = document.getElementsByClassName('summa');
+  var total_tansum = document.getElementById('total_tansum');
+  var tansumma = document.getElementsByClassName('tansumma');
+  var total_ssum = document.getElementById('total_ssum');
+  var ssumma = document.getElementsByClassName('ssumma');
+  
+
+  function totalResult(element_id, element_class){
+      var cal = 0;
+      for(let i=0; i<element_class.length; i++){
+        cal +=  parseFloat(element_class[i].textContent);
+      }
+      element_id.textContent = cal;
+      
+  }
+  totalResult(total_tansum, tansumma);
+  totalResult(total_sum, summa);
+  totalResult(total_ssum, ssumma);
+  
+  
+ 
+</script>
+{% endblock content %}
