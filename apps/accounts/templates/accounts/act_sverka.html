@@ -4,16 +4,16 @@
 <div class="container">
 <br>
 {% if provider %}
-<h1>"{{ provider }}" bo'yicha Akt sverka. {{ fromdate}} dan {{ todate }} gacha</h1> <br>
+<h1>"{{ provider }}" bo'yicha Akt sverka. {{obj}} </h1> <br>
 {% else %}
 <h1> Akt sverka </h1> <br>
 {% endif %}
 <form class="d-flex" action="" method="POST">
   {% csrf_token %}
-  <input type="date" class="form-control" name="fromdate" id="fromdate">
-  <input type="date" class="form-control ms-3" name="todate" id="todate">
+  <input type="date" class="form-control" name="fromdate" id="fromdate" value="{{ fromdate}}">
+  <input type="date" class="form-control ms-3" name="todate" id="todate" value="{{ todate }}">
   <select name="provider" id="provider_id" class="form-select ms-3" aria-label="select example">
-  <option value="" hidden>Providerni tanlang</option>
+  <option value="{{ provider }}" hidden>Providerni tanlang</option>
     {% for x in providers %}
       <option value="{{ x }}">{{ x }}</option>
     {% endfor %}
@@ -81,12 +81,13 @@
     let tomorrow = year + "-" + month + "-" + day; 
     let fd = year + "-" + month + "-" + "01";   
 
-  
-    document.getElementById("todate").value = tomorrow;
-    document.getElementById("fromdate").value = fd;
-
-    document.getElementById("todate").value = tomorrow;
-    document.getElementById("fromdate").value = fd;
+    if (document.getElementById("todate").value == '') {
+      document.getElementById("todate").value = tomorrow;
+    }
+    if (document.getElementById("fromdate").value == '') {
+      document.getElementById("fromdate").value = fd;
+    }
+    
 
     let qoldiq = document.getElementsByClassName('qoldiq');
     let x = 0;

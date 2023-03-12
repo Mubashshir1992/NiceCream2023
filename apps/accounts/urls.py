@@ -10,4 +10,5 @@ urlpatterns = [
     path('act_sverka/', views.act_sverka, name='act_sverka'),
     path('act_sverka_client/', views.act_sverka_client, name='act_sverka_client'),
     path('my_act_sverka/', views.my_act_sverka, name='my_act_sverka'),
+    path('my_act_sverkaCL/', views.my_act_sverkaCL, name='my_act_sverkaCL'),
 ]

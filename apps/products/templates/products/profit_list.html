@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+<br>
+<h1>Foydalar</h1> <br>
+<form class="d-flex" action="" method="POST">
+  {% csrf_token %}
+  <input type="date" class="form-control" name="fromdate" id="fromdate" value="{{ fromdate}}">
+  <input type="date" class="form-control ms-3" name="todate" id="todate" value="{{ todate }}">
+  <button class="btn btn-outline-success ms-3" type="submit">Select</button>
+</form>
+<br>
+
+<table class="table table-striped table-hover table-bordered">
+    <thead class="table-info">
+      <tr>
+        <th scope="col">№</th>
+        <th scope="col">Sana</th>
+        <th scope="col">Foyda</th>
+        <th scope="col">SFoyda</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for profit in profit_list %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ profit.trans_date }}</td>
+        <td class="foyda">{{ profit.profit }}</td>
+        <td class="sfoyda">{{ profit.sprofit}}</td>
+      </tr>
+      {% endfor %}
+      <tr class="table-dark border-primary fs-5 fw-bold">
+        <td>Total</td>
+        <td></td>
+        <td id="total"></td>
+        <td id="totals"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<script>
+    
+  let total = document.getElementById('total');
+  let totals = document.getElementById('totals');
+  let foyda = document.getElementsByClassName('foyda');
+  let sfoyda = document.getElementsByClassName('sfoyda');
+  
+    function totalResult(element_id, element_class){
+      let cal = 0;
+        for(let i=0; i<element_class.length; i++){
+          cal +=  parseFloat(element_class[i].innerHTML);
+          if (parseInt(element_class[i].textContent) < 0) {
+          element_class[i].classList.add('text-danger')
+        } else if(parseInt(element_class[i].textContent) == 0) {
+          element_class[i].classList.add('text-warning')
+        } else {
+          element_class[i].classList.add('text-bold')
+        };
+        }
+        element_id.innerHTML = cal;
+    }
+  totalResult(total, foyda);
+  totalResult(totals, sfoyda);
+
+  let date = new Date();
+    let nextDay = new Date(date);
+    nextDay.setDate(date.getDate()+1);
+    let day = nextDay.getDate() < 10 ? '0' + nextDay.getDate() : nextDay.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    if (month < 10) month = "0" + month;
+    let tomorrow = year + "-" + month + "-" + day; 
+    let fd = year + "-" + month + "-" + "01";   
+
+    if (document.getElementById("todate").value == '') {
+      document.getElementById("todate").value = tomorrow;
+    }
+    if (document.getElementById("fromdate").value == '') {
+      document.getElementById("fromdate").value = fd;
+    }
+  </script>
+  
+{% endblock content %}

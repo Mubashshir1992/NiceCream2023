@@ -3,11 +3,11 @@
 {% block content %}
 <div class="container">
 <br>
-<h1>Akt sverka. {{ fromdate}} dan {{ todate }} gacha</h1> <br>
+<h1>Akt sverka</h1> <br>
 <form class="d-flex" action="" method="POST">
   {% csrf_token %}
-  <input type="date" class="form-control" name="fromdate" id="fromdate">
-  <input type="date" class="form-control ms-3" name="todate" id="todate">
+  <input type="date" class="form-control" name="fromdate" id="fromdate" value="{{ fromdate}}">
+  <input type="date" class="form-control ms-3" name="todate" id="todate" value="{{ todate }}">
   <button class="btn btn-outline-success ms-3" type="submit">Select</button>
 </form>
 <br>
@@ -27,20 +27,15 @@
       {% for q in qs %}
       <tr>
         <th scope="row">{{ forloop.counter }}</th>
-        <td><a href="{% url 'in_document_products' document.id %}">{{ q.trans_date }}</a></td>
+        <td>{{ q.trans_date }}</td>
         <td>{{ q.comment }}</td>
-        {% if q.summa %}
         <td class="balans">{{ q.summa }}</td>
-        {% endif %}
-        {% if q.ssumma %}
-        <td class="sbalans">{{ q.ssumma }}</td>
-        {% endif %}
         <td class="qoldiq"></td>
       </tr>
       {% endfor %}
       <tr class="table-dark border-primary fs-5 fw-bold">
         <td>Total</td>
-        <td></td>
+        <td>Balans: {{balance.balance}}</td>
         <td></td>
         <td id="total"></td>
         <td></td>
@@ -64,16 +59,6 @@
           balans[i].classList.add('text-primary')
         };
     }
-    // for(let i=0; i<sbalans.length; i++){
-    //     cal +=  parseInt(sbalans[i].innerHTML);
-    //     if (parseInt(sbalans[i].textContent) < 0) {
-    //       sbalans[i].classList.add('text-danger')
-    //     } else if(parseInt(sbalans[i].textContent) == 0) {
-    //       sbalans[i].classList.add('text-warning')
-    //     } else {
-    //       sbalans[i].classList.add('text-primary')
-    //     };
-    // }
     total.innerHTML = cal;
 
     let date = new Date();
@@ -87,9 +72,12 @@
     let tomorrow = year + "-" + month + "-" + day; 
     let fd = year + "-" + month + "-" + "01";   
 
-  
-    document.getElementById("todate").value = tomorrow;
-    document.getElementById("fromdate").value = fd;
+    if (document.getElementById("todate").value == '') {
+      document.getElementById("todate").value = tomorrow;
+    }
+    if (document.getElementById("fromdate").value == '') {
+      document.getElementById("fromdate").value = fd;
+    }
 
     let qoldiq = document.getElementsByClassName('qoldiq');
     let x = 0;

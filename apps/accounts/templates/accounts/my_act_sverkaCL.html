@@ -3,21 +3,11 @@
 {% block content %}
 <div class="container">
 <br>
-{% if client %}
-<h1>"{{ client }}" bo'yicha Akt sverka.</h1> <br>
-{% else %}
-<h1> Akt sverka Client </h1> <br>
-{% endif %}
+<h1>Akt sverka</h1> <br>
 <form class="d-flex" action="" method="POST">
   {% csrf_token %}
   <input type="date" class="form-control" name="fromdate" id="fromdate" value="{{ fromdate}}">
   <input type="date" class="form-control ms-3" name="todate" id="todate" value="{{ todate }}">
-  <select name="client" id="client_id" class="form-select ms-3" aria-label="select example">
-  <option value="" hidden>clientni tanlang</option>
-    {% for x in clients %}
-      <option value="{{ x }}">{{ x }}</option>
-    {% endfor %}
-  </select>
   <button class="btn btn-outline-success ms-3" type="submit">Select</button>
 </form>
 <br>
@@ -45,7 +35,7 @@
       {% endfor %}
       <tr class="table-dark border-primary fs-5 fw-bold">
         <td>Total</td>
-        <td></td>
+        <td>Balans: {{balance.balance}}</td>
         <td></td>
         <td id="total"></td>
         <td></td>
@@ -57,6 +47,7 @@
     
     let total = document.getElementById('total');
     let balans = document.getElementsByClassName('balans');
+    let sbalans = document.getElementsByClassName('sbalans');
     let cal = 0;
     for(let i=0; i<balans.length; i++){
         cal +=  parseInt(balans[i].innerHTML);
@@ -100,6 +91,7 @@
       }
       qoldiq[i].textContent = parseInt(qoldiq[i].parentElement.children[3].textContent) + oldqoldiq
     }
+    
   </script>
 </div>  
 {% endblock content %}

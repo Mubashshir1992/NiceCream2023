@@ -42,6 +42,7 @@
               <li><a class="dropdown-item" href="{% url 'expense_list' %}">Expense</a></li>
               <li><a class="dropdown-item" href="{% url 'act_sverka' %}">Akt sverka</a></li>
               <li><a class="dropdown-item" href="{% url 'act_sverka_client' %}">Akt sverka Client</a></li>
+              <li><a class="dropdown-item" href="{% url 'profit_list' %}">PROFIT</a></li>
             </ul>
           </li>
           <li class="nav-item">
@@ -62,7 +63,11 @@
           <a href="{% url 'home' %}" class="nav-link px-4 text-warning fs-4">Biz haqimizda</a>
         
           {% if user.is_authenticated %}
-          <a href="{% url 'my_act_sverka' %}" class="nav-link px-4 text-info fs-4">Mening hisobim</a>
+              {% if user.user_type == 'PR' %}
+                <a href="{% url 'my_act_sverka' %}" class="nav-link px-4 text-info fs-4">Mening hisobim</a>
+              {% else %}
+              <a href="{% url 'my_act_sverkaCL' %}" class="nav-link px-4 text-info fs-4">Mening hisobim</a>
+              {% endif %}
           <a href="{% url 'logout' %}" class="btn btn-danger mt-2 mb-2 mx-2">LogOut</a>
           <div class="d-block">
             

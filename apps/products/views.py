@@ -7,6 +7,7 @@ from apps.accounts.models import User
 from apps.cashes.models import Transaction
 from django.views import View
 from django.contrib import messages
+import datetime
 
 # Create your views here.
 
@@ -500,3 +501,20 @@ def out_documentclient_products(request, document_id):
     else:
         messages.success(request, ("That Document Has No Products At This Time..!"))
         return redirect('out_documentclient_list')
+
+
+# Foyda
+def profit_list(request):
+    today = datetime.date.today()
+    todate = today + datetime.timedelta(days=1)
+    fromdate = today.replace(day=1)
+    profit_list = Transaction.objects.filter(trans_date__lte = todate, trans_date__gte = fromdate,).order_by('trans_date')
+    if request.method == "POST":
+        fromdate = request.POST['fromdate']
+        todate = request.POST['todate']
+        profit_list = Transaction.objects.filter(trans_date__lte = todate, trans_date__gte = fromdate,).order_by('trans_date')
+    return render(request, 'products/profit_list.html', {
+        'profit_list' : profit_list,
+        'todate' : todate,
+        'fromdate' : fromdate,
+    }) 

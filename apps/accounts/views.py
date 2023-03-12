@@ -73,6 +73,7 @@ def act_sverka(request):
         todate = None
         fromdate = None
         qs = None
+        obj = request.POST.getlist('todate')
         if request.method == "POST":
             provider = request.POST['provider']
             fromdate = request.POST['fromdate']
@@ -85,6 +86,7 @@ def act_sverka(request):
         'todate' : todate,
         'fromdate' : fromdate,
         'qs' : qs,
+        'obj' : obj,
 
     })
 
@@ -112,35 +114,62 @@ def act_sverka_client(request):
     })  
 
 
-# MY Akt sverka
+# MY Akt sverka Provider
 def my_act_sverka(request):
         me = request.user.id
-        document_list = InDocument.objects.all()
-        for doc in document_list:
-            document=doc
-            
+        balance = User.objects.get(id = me)   
         pr_id = User.objects.filter(user_type = 'PR').values_list('id', flat=True)
-        cl_id = User.objects.filter(user_type = 'CL').values_list('id', flat=True)
+        # cl_id = User.objects.filter(user_type = 'CL').values_list('id', flat=True)
         today = datetime.date.today()
         todate = today + datetime.timedelta(days=1)
         fromdate = today.replace(day=1)
         if me in pr_id:
-            qs = Transaction.objects.filter(provider_id=me, trans_date__lte = todate, trans_date__gte = fromdate,)
-        if me in cl_id:
-            qs = Transaction.objects.filter(client_id=me, trans_date__lte = todate, trans_date__gte = fromdate,)
+            qs = Transaction.objects.filter(provider_id=me, trans_date__lte = todate, trans_date__gte = fromdate,).order_by('trans_date')
+        # if me in cl_id:
+        #     qs = Transaction.objects.filter(client_id=me, trans_date__lte = todate, trans_date__gte = fromdate,)
             
         if request.method == "POST":
             fromdate = request.POST['fromdate']
             todate = request.POST['todate']
             if me in pr_id:
-                qs = Transaction.objects.filter(provider_id=me, trans_date__lte = todate, trans_date__gte = fromdate,)
-            if me in cl_id:
-                qs = Transaction.objects.filter(client_id=me, trans_date__lte = todate, trans_date__gte = fromdate,)
+                qs = Transaction.objects.filter(provider_id=me, trans_date__lte = todate, trans_date__gte = fromdate,).order_by('trans_date')
+            # if me in cl_id:
+            #     qs = Transaction.objects.filter(client_id=me, trans_date__lte = todate, trans_date__gte = fromdate,)
 
         return render(request, 'accounts/my_act_sverka.html', {
         'todate' : todate,
         'fromdate' : fromdate,
         'qs' : qs,
-        'document' : document,
+        'balance' : balance,
+
+    })  
+
+# MY Akt sverka Client
+def my_act_sverkaCL(request):
+        me = request.user.id
+        balance = User.objects.get(id = me)     
+        # pr_id = User.objects.filter(user_type = 'PR').values_list('id', flat=True)
+        cl_id = User.objects.filter(user_type = 'CL').values_list('id', flat=True)
+        today = datetime.date.today()
+        todate = today + datetime.timedelta(days=1)
+        fromdate = today.replace(day=1)
+        # if me in pr_id:
+        #     qs = Transaction.objects.filter(provider_id=me, trans_date__lte = todate, trans_date__gte = fromdate,)
+        if me in cl_id:
+            qs = Transaction.objects.filter(client_id=me, trans_date__lte = todate, trans_date__gte = fromdate,).order_by('trans_date')
+            
+        if request.method == "POST":
+            fromdate = request.POST['fromdate']
+            todate = request.POST['todate']
+            # if me in pr_id:
+            #     qs = Transaction.objects.filter(provider_id=me, trans_date__lte = todate, trans_date__gte = fromdate,)
+            if me in cl_id:
+                qs = Transaction.objects.filter(client_id=me, trans_date__lte = todate, trans_date__gte = fromdate,).order_by('trans_date')
+
+        return render(request, 'accounts/my_act_sverkaCL.html', {
+        'todate' : todate,
+        'fromdate' : fromdate,
+        'qs' : qs,
+        'balance' : balance,
 
     })  

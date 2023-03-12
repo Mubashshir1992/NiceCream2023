@@ -38,5 +38,6 @@ urlpatterns = [
     path('update_out_documentclient/<document_id>/', views.update_out_documentclient, name='update_out_documentclient'),
     path('delete_out_documentclient/<document_id>/', views.delete_out_documentclient, name='delete_out_documentclient'),
     path('out_documentclient_products/<document_id>/', views.out_documentclient_products, name='out_documentclient_products'),
+    path('profit_list/', views.profit_list, name='profit_list'),
     
 ]
